@@ -2,6 +2,13 @@
 
 This is a Python project that uses Elastic search to do some basic operations
 
+### Requirements
+
++ Operating System: Ubuntu 16x, 17x, 18x
++ Programming Language: Python 3x
++ elasticsearch==7.0.0
++ urllib3==1.24.2
+
 ### Docker installation
 
 ```

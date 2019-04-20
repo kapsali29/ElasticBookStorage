@@ -138,3 +138,39 @@ class ElasticBookStorage(object):
             return results
         except Exception as ee:
             print(ee)
+
+    def fuzzy_queries(self, query):
+        """
+        The following function receives a query and search to match books using the provided query
+        to match books title and summary using Fuzzy matching.
+
+        Fuzzy matching can be enabled on Match and Multi-Match queries to catch spelling errors.
+        The degree of fuzziness is specified based on the Levenshtein distance from the original word,
+        i.e. the number of one-character changes that need to be made to one string to make it the same
+        as another string.
+
+        :param query: provided query
+        :return: results
+
+        :Examples:
+            >>> query="comprihensiv guide"
+            >>> elk = ElasticBookStorage()
+            >>> elk.fuzzy_queries(query)
+        """
+        try:
+            body = {
+                "query": {
+                    "multi_match": {
+                        "query": query,
+                        "fields": ["title", "summary"],
+                        "fuzziness": "AUTO"
+                    }
+                },
+                "_source": ["title", "summary", "publish_date"],
+                "size": 1
+            }
+
+            results = self.es.search(index=self.book_index, body=body)["hits"]["hits"]
+            return results
+        except Exception as ee:
+            print(ee)
