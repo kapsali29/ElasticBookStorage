@@ -1,0 +1,38 @@
+version: '3.4'
+
+services:
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.6.2
+    hostname: elasticsearch
+    container_name: elasticsearch
+    restart: always
+    environment:
+      - "ES_JAVA_OPTS: -Xms750m -Xmx750m"
+    networks:
+      docker-elk:
+    ports:
+      - "9200:9200"
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:6.6.2
+    container_name: kibana
+    restart: always
+    environment:
+      - "ELASTICSEARCH_URL=http://elasticsearch:9200"
+    networks:
+      - docker-elk
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+
+
+volumes:
+  db:
+
+networks:
+  docker-elk:
+    driver: bridge
+    driver_opts:
+      com.docker.network.driver.mtu: 1400
