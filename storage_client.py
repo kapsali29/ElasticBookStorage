@@ -94,7 +94,7 @@ class ElasticBookStorage(object):
         except Exception as e:
             print(e)
 
-    def basic_match_query(self, query):
+    def multi_match_query(self, query):
         """
         The following function is used to perform a basic match query using elastic search
         functionalities
@@ -111,3 +111,30 @@ class ElasticBookStorage(object):
             return results
         except Exception as e:
             print(e)
+
+    def search_book_by_title(self, query):
+        """
+        The following function is used to retrieve results from
+        elastic search searching for books that contains in their title
+
+        the provided query
+        :param query: provided query to search
+        :return: results
+
+        :Examples:
+            >>> query = "in action"
+            >>> elk = ElasticBookStorage()
+            >>> results = elk.search_book_by_title(query)
+        """
+        try:
+            body = {
+                "query": {
+                    "match": {
+                        "title": query
+                    }
+                }
+            }
+            results = self.es.search(index=self.book_index, body=body)["hits"]["hits"]
+            return results
+        except Exception as ee:
+            print(ee)

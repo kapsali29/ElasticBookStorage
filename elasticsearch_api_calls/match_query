@@ -1,0 +1,9 @@
+GET /bookdb_index/book/_search
+{
+    "query": {
+        "match" : {
+            "title" : "in action"
+        }
+    }
+
+}
