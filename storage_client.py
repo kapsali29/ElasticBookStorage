@@ -27,3 +27,69 @@ class ElasticBookStorage(object):
         except Exception as ex:
             print(ex)
         pass
+
+    def create_book_doc(self, title, authors, summary, publisher, num_reviews, publish_date):
+        """
+        The following function is used to create a book entry to elasticsearch using the provided info
+        :param title: book title
+        :param authors: book authors
+        :param summary: book summary
+        :param publisher: book publisher
+        :param num_reviews: book number of reviews
+        :param publish_date: book publish date
+        :return: pass
+
+        :Example:
+            >>> title="Some book"
+            >>> authors=["Author1", "Author2"]
+            >>> summary = "this is a book written by Author1 and Author2"
+            >>> publisher = "Loki AE"
+            >>> num_reviews = 20
+            >>> publish_date = "2014-04-05"
+            >>> elk = ElasticBookStorage()
+            >>> elk.create_book_doc(title, authors, summary, publisher, num_reviews, publish_date)
+        """
+        try:
+            body = {
+                "title": title,
+                "authors": authors,
+                "summary": summary,
+                "publisher": publisher,
+                "num_reviews": num_reviews,
+                "publish_date": publish_date
+            }
+            self.es.index(index=self.book_index, doc_type=self.book_doc, body=body)
+        except Exception as e:
+            print(e)
+
+    def retrieve_book_by_id(self, book_id):
+        """
+        The following function is used to retrieve a book document from the elastic search using is ID
+        :param book_id: book id
+        :return: result document
+
+        :Example:
+            >>> elk = ElasticBookStorage()
+            >>> book = elk.retrieve_book_by_id(book_id=2)
+        """
+        try:
+            results = self.es.get_source(index=self.book_index, doc_type=self.book_doc, id=str(book_id))
+            return results
+        except Exception as ex:
+            print(ex)
+
+    def remove_book_doc(self, book_id):
+        """
+        The following function is used to remove a book entry from elastic search
+        using its ID
+        :param book_id: book ID
+        :return:
+
+        :Example:
+            >>> elk = ElasticBookStorage()
+            >>> elk.remove_book_doc(book_id=2)
+        """
+        try:
+            self.es.delete(index=self.book_index, doc_type=self.book_doc, id=str(book_id))
+        except Exception as e:
+            print(e)
