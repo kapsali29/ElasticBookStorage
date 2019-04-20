@@ -1,8 +1,8 @@
-### ElasticBookStorage
+## ElasticBookStorage
 
 This is a Python project that uses Elastic search to do some basic operations
 
-## Docker installation
+### Docker installation
 
 ```
 sudo apt-get update
@@ -14,14 +14,14 @@ sudo apt-get update
 sudo apt-get -y install docker-ce
 ```
 
-## docker-compose installation
+### docker-compose installation
 
 ```
 sudo curl -L https://github.com/docker/compose/releases/download/1.18.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
 ```
 
-## Install ElasticSearch & Kibana
+### Install ElasticSearch & Kibana
 
 ```
 sudo docker-compose -f modules/docker-compose.yml up -d
