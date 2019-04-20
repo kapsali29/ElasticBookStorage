@@ -93,3 +93,21 @@ class ElasticBookStorage(object):
             self.es.delete(index=self.book_index, doc_type=self.book_doc, id=str(book_id))
         except Exception as e:
             print(e)
+
+    def basic_match_query(self, query):
+        """
+        The following function is used to perform a basic match query using elastic search
+        functionalities
+
+        :param query: provided query parameter
+        :return: results
+
+        :Examples:
+            >>> elk = ElasticBookStorage()
+            >>> results = elk.basic_match_query(query="guide")
+        """
+        try:
+            results = self.es.search(index=self.book_index, q=query)["hits"]["hits"]
+            return results
+        except Exception as e:
+            print(e)
