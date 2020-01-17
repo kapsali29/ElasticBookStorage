@@ -1,13 +1,15 @@
 from elasticsearch import Elasticsearch
 
+from settings import ELASTIC_INDEX, ELASTIC_DOC, ELASTIC_HOSTNAME, ELASTIC_PORT
+
 
 class ElasticBookStorage(object):
 
     def __init__(self):
-        self.book_index = "bookdb_index"
-        self.book_doc = "book"
-        self.ELK_HOSTNAME = "localhost"
-        self.ELK_PORT = 9200
+        self.book_index = ELASTIC_INDEX
+        self.book_doc = ELASTIC_DOC
+        self.ELK_HOSTNAME = ELASTIC_HOSTNAME
+        self.ELK_PORT = ELASTIC_PORT
 
         self.es = Elasticsearch([{
             'host': self.ELK_HOSTNAME,
