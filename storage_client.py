@@ -142,7 +142,7 @@ class ElasticBookStorage(object):
         except Exception as e:
             print(e)
 
-    def search_book_by_title(self, query):
+    def search_book_by_param(self, *args):
         """
         The following function is used to retrieve results from
         elastic search searching for books that contains in their title
@@ -157,10 +157,13 @@ class ElasticBookStorage(object):
             >>> results = elk.search_book_by_title(query)
         """
         try:
+            term = args[0]
+            query = args[1]
+
             body = {
                 "query": {
                     "match": {
-                        "title": query
+                        "{}".format(term): query
                     }
                 }
             }
