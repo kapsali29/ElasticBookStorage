@@ -1,7 +1,7 @@
 from elasticsearch import Elasticsearch
 
 from settings import ELASTIC_INDEX, ELASTIC_DOC, ELASTIC_HOSTNAME, ELASTIC_PORT
-
+# https://dzone.com/articles/23-useful-elasticsearch-example-queries
 
 class ElasticBookStorage(object):
 
