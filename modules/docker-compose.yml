@@ -8,7 +8,7 @@ services:
     container_name: elasticsearch
     restart: always
     environment:
-      - "ES_JAVA_OPTS: -Xms750m -Xmx750m"
+      - "ES_JAVA_OPTS=-Xms750m -Xmx750m"
     networks:
       docker-elk:
     ports:
