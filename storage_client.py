@@ -154,7 +154,7 @@ class ElasticBookStorage(object):
         :Examples:
             >>> query = "in action"
             >>> elk = ElasticBookStorage()
-            >>> results = elk.search_book_by_title(query)
+            >>> results = elk.search_book_by_title("title", "in action")
         """
         try:
             term = args[0]
@@ -172,7 +172,7 @@ class ElasticBookStorage(object):
         except Exception as ee:
             print(ee)
 
-    def fuzzy_queries(self, query):
+    def fuzzy_queries(self, query, **kwargs):
         """
         The following function receives a query and search to match books using the provided query
         to match books title and summary using Fuzzy matching.
@@ -188,14 +188,15 @@ class ElasticBookStorage(object):
         :Examples:
             >>> query="comprihensiv guide"
             >>> elk = ElasticBookStorage()
-            >>> elk.fuzzy_queries(query)
+            >>> elk.fuzzy_queries(query, fields=["title", "summary"])
         """
         try:
+            fields = kwargs["fields"]
             body = {
                 "query": {
                     "multi_match": {
                         "query": query,
-                        "fields": ["title", "summary"],
+                        "fields": fields,
                         "fuzziness": "AUTO"
                     }
                 },
