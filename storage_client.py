@@ -1,6 +1,9 @@
 from elasticsearch import Elasticsearch
+from elasticsearch import helpers
 
 from settings import ELASTIC_INDEX, ELASTIC_DOC, ELASTIC_HOSTNAME, ELASTIC_PORT
+
+
 # https://dzone.com/articles/23-useful-elasticsearch-example-queries
 
 class ElasticBookStorage(object):
@@ -29,6 +32,31 @@ class ElasticBookStorage(object):
         except Exception as ex:
             print(ex)
         pass
+
+    def bulk_insert(self, data):
+        """
+        The following function is used to insert bulk data to ElasticSearch
+
+        :param data: list of dict
+        :return:
+
+        Example:
+            >>> data = [{ "title": "Solr in Action", "authors": ["trey grainger", "timothy potter"], "summary" : "Comprehensive guide","publish_date" : "2015-12-03", "num_reviews": 18, "publisher": "manning" }]
+            >>> bulk_insert(data)
+        """
+        try:
+            actions = [
+                {
+                    "_index": self.book_index,
+                    "_type": self.book_doc,
+                    "_id": i,
+                    "_source": data[i]
+                }
+                for i in range(len(data))
+            ]
+            helpers.bulk(self.es, actions=actions)
+        except Exception as e:
+            print(e)
 
     def create_book_doc(self, title, authors, summary, publisher, num_reviews, publish_date):
         """
