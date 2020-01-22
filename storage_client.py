@@ -1,5 +1,6 @@
 from elasticsearch import Elasticsearch
 from elasticsearch import helpers
+from elasticsearch_dsl import Search, Q
 
 from settings import ELASTIC_INDEX, ELASTIC_DOC, ELASTIC_HOSTNAME, ELASTIC_PORT
 
@@ -341,7 +342,7 @@ class ElasticBookStorage(object):
         except Exception as ex:
             print(ex)
 
-    def term_query(self,_source=[], **kwargs):
+    def term_query(self, _source=[], **kwargs):
         """
         The above examples have been examples of full-text search.
 
@@ -370,5 +371,27 @@ class ElasticBookStorage(object):
             }
             results = self.es.search(index=self.book_index, body=body)["hits"]["hits"]
             return results
+        except Exception as ex:
+            print(ex)
+
+    def delete_by_query(self, query, fields):
+        """
+        This function is used to delete by query
+
+        :param query: provided query
+        :param fields: provided fields
+        :return:
+
+        Example:
+            >>> delete_by_query(query="python", fields=['title'])
+        """
+        try:
+            client = Elasticsearch()
+            s = Search(using=client, index=self.book_index)
+
+            retrieved_items = s.query(
+                Q("multi_match", query=query, fields=fields)
+            )
+            retrieved_items.delete()
         except Exception as ex:
             print(ex)
