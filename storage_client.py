@@ -274,7 +274,7 @@ class ElasticBookStorage(object):
         except Exception as ex:
             print(ex)
 
-    def match_phrase_query(self, query, _source, **kwargs):
+    def match_phrase_query(self, query, _source=[], **kwargs):
         """
         The match phrase query requires that all the terms in the query string be present in the document,
         be in the order specified in the query string and be close to each other.
