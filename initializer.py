@@ -1,6 +1,8 @@
 #  This file is used to initialize ElasticSearch with Data
 from storage_client import ElasticBookStorage
 
+# https://www.kaggle.com/ymaricar/cmu-book-summary-dataset
+
 DATA = [
     {"title": "Elasticsearch: The Definitive Guide", "authors": ["clinton gormley", "zachary tong"],
      "summary": "A distibuted real-time search and analytics engine", "publish_date": "2015-02-07", "num_reviews": 20,

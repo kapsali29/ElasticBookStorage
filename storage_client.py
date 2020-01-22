@@ -303,3 +303,35 @@ class ElasticBookStorage(object):
             return results
         except Exception as ex:
             print(ex)
+
+    def match_phrase_prefix(self, query, slop,  max_expansions=10):
+        """
+        Match phrase prefix queries provide search-as-you-type or a poor man’s version of autocomplete at query
+        time without needing to prepare your data in any way.Like the match_phrase query,
+        it accepts a slop parameter to make the word order and relative positions somewhat less rigid.
+        It also accepts the max_expansions parameter to limit the number of terms matched in order to reduce resource intensity.
+
+        :param query: provided query
+        :param slop: provided slop
+        :param max_expansions: provided max expansions
+        :return:
+
+        Example:
+            >>> match_phrase_prefix(query="search en", slop=3)
+        """
+        try:
+            body = {
+                "query": {
+                    "match_phrase_prefix": {
+                        "summary": {
+                            "query": query,
+                            "slop": slop,
+                            "max_expansions": max_expansions
+                        }
+                    }
+                },
+            }
+            results = self.es.search(index=self.book_index, body=body)["hits"]["hits"]
+            return results
+        except Exception as ex:
+            print(ex)
