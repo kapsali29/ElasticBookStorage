@@ -142,7 +142,7 @@ class ElasticBookStorage(object):
         except Exception as e:
             print(e)
 
-    def search_book_by_param(self, *args):
+    def search_book_by_param(self, _source=[], *args):
         """
         The following function is used to retrieve results from
         elastic search searching for books that contains in their title
@@ -165,14 +165,15 @@ class ElasticBookStorage(object):
                     "match": {
                         "{}".format(term): query
                     }
-                }
+                },
+                "_source": _source
             }
             results = self.es.search(index=self.book_index, body=body)["hits"]["hits"]
             return results
         except Exception as ee:
             print(ee)
 
-    def fuzzy_queries(self, query, **kwargs):
+    def fuzzy_queries(self, query, _source=[], **kwargs):
         """
         The following function receives a query and search to match books using the provided query
         to match books title and summary using Fuzzy matching.
@@ -200,7 +201,7 @@ class ElasticBookStorage(object):
                         "fuzziness": "AUTO"
                     }
                 },
-                "_source": ["title", "summary", "publish_date"],
+                "_source": _source,
                 "size": 1
             }
 
@@ -209,7 +210,7 @@ class ElasticBookStorage(object):
         except Exception as ee:
             print(ee)
 
-    def wild_card_query(self, *args, query):
+    def wild_card_query(self, query, _source=[], *args):
         """
         This function is used to perform ElasticSearch wild card queries
 
@@ -233,14 +234,15 @@ class ElasticBookStorage(object):
                     "fields": {
                         "".format(field): {}
                     }
-                }
+                },
+                "_source": _source
             }
             results = self.es.search(index=self.book_index, body=body)["hits"]["hits"]
             return results
         except Exception as ex:
             print(ex)
 
-    def regex_query(self, query, *args):
+    def regex_query(self, query, _source=[], *args):
         """
         Regexp queries allow you to specify more complex patterns than wildcard queries
 
@@ -264,14 +266,15 @@ class ElasticBookStorage(object):
                     "fields": {
                         "{}".format(field): {}
                     }
-                }
+                },
+                "_source": _source
             }
             results = self.es.search(index=self.book_index, body=body)["hits"]["hits"]
             return results
         except Exception as ex:
             print(ex)
 
-    def match_phrase_query(self, query, **kwargs):
+    def match_phrase_query(self, query, _source, **kwargs):
         """
         The match phrase query requires that all the terms in the query string be present in the document,
         be in the order specified in the query string and be close to each other.
@@ -283,7 +286,7 @@ class ElasticBookStorage(object):
         :return:
 
         Example:
-            >>> match_phrase_query(query="search engine", fields=["title", "summary"], slop=3)
+            >>> match_phrase_query(query="search engine", fields=["title", "summary"], slop=3, _source=[])
         """
         try:
             fields = kwargs["fields"]
@@ -297,14 +300,15 @@ class ElasticBookStorage(object):
                         "type": "phrase",
                         "slop": slop
                     }
-                }
+                },
+                "_source": _source
             }
             results = self.es.search(index=self.book_index, body=body)["hits"]["hits"]
             return results
         except Exception as ex:
             print(ex)
 
-    def match_phrase_prefix(self, query, slop, max_expansions=10):
+    def match_phrase_prefix(self, query, slop, max_expansions=10, _source=[]):
         """
         Match phrase prefix queries provide search-as-you-type or a poor man’s version of autocomplete at query
         time without needing to prepare your data in any way.Like the match_phrase query,
@@ -330,13 +334,14 @@ class ElasticBookStorage(object):
                         }
                     }
                 },
+                "_source": _source
             }
             results = self.es.search(index=self.book_index, body=body)["hits"]["hits"]
             return results
         except Exception as ex:
             print(ex)
 
-    def term_query(self,  **kwargs):
+    def term_query(self,_source=[], **kwargs):
         """
         The above examples have been examples of full-text search.
 
@@ -361,6 +366,7 @@ class ElasticBookStorage(object):
                         "{}".format(field): term
                     }
                 },
+                "_source": _source
             }
             results = self.es.search(index=self.book_index, body=body)["hits"]["hits"]
             return results
