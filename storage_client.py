@@ -304,7 +304,7 @@ class ElasticBookStorage(object):
         except Exception as ex:
             print(ex)
 
-    def match_phrase_prefix(self, query, slop,  max_expansions=10):
+    def match_phrase_prefix(self, query, slop, max_expansions=10):
         """
         Match phrase prefix queries provide search-as-you-type or a poor man’s version of autocomplete at query
         time without needing to prepare your data in any way.Like the match_phrase query,
@@ -328,6 +328,37 @@ class ElasticBookStorage(object):
                             "slop": slop,
                             "max_expansions": max_expansions
                         }
+                    }
+                },
+            }
+            results = self.es.search(index=self.book_index, body=body)["hits"]["hits"]
+            return results
+        except Exception as ex:
+            print(ex)
+
+    def term_query(self,  **kwargs):
+        """
+        The above examples have been examples of full-text search.
+
+        :param kwargs: provided kwargs
+        :return:
+
+        Example:
+            >>> term_query(field="publisher", term="manning")
+        """
+        try:
+            field = kwargs["field"]
+            term = kwargs["term"]
+
+            if isinstance(term, list):
+                term_or_terms = "terms"
+            else:
+                term_or_terms = "term"
+
+            body = {
+                "query": {
+                    "{}".format(term_or_terms): {
+                        "{}".format(field): term
                     }
                 },
             }
