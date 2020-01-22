@@ -208,3 +208,34 @@ class ElasticBookStorage(object):
             return results
         except Exception as ee:
             print(ee)
+
+    def wild_card_query(self, *args, query):
+        """
+        This function is used to perform ElasticSearch wild card queries
+
+        :param args: given arguments
+        :param query: given query
+        :return:
+
+        Example:
+            >>> wild_card_query("authors", query="t*")
+        """
+        try:
+            field = args[0]
+
+            body = {
+                "query": {
+                    "wildcard": {
+                        "{}".format(field): query
+                    }
+                },
+                "highlight": {
+                    "fields": {
+                        "authors": {}
+                    }
+                }
+            }
+            results = self.es.search(index=self.book_index, body=body)["hits"]["hits"]
+            return results
+        except Exception as ex:
+            print(ex)
