@@ -231,7 +231,71 @@ class ElasticBookStorage(object):
                 },
                 "highlight": {
                     "fields": {
-                        "authors": {}
+                        "".format(field): {}
+                    }
+                }
+            }
+            results = self.es.search(index=self.book_index, body=body)["hits"]["hits"]
+            return results
+        except Exception as ex:
+            print(ex)
+
+    def regex_query(self, query, *args):
+        """
+        Regexp queries allow you to specify more complex patterns than wildcard queries
+
+        :param query: provided query
+        :param args: provided arguments
+        :return:
+
+        Example:
+            >>> regex_query("authors", query="t[a-z]*y")
+        """
+        try:
+            field = args[0]
+
+            body = {
+                "query": {
+                    "regexp": {
+                        "{}".format(field): query
+                    }
+                },
+                "highlight": {
+                    "fields": {
+                        "{}".format(field): {}
+                    }
+                }
+            }
+            results = self.es.search(index=self.book_index, body=body)["hits"]["hits"]
+            return results
+        except Exception as ex:
+            print(ex)
+
+    def match_phrase_query(self, query, **kwargs):
+        """
+        The match phrase query requires that all the terms in the query string be present in the document,
+        be in the order specified in the query string and be close to each other.
+        By default, the terms are required to be exactly beside each other but you can specify the slop value which
+        indicates how far apart terms are allowed to be while still considering the document a match.
+
+        :param query: provided query
+        :param kwargs: provided kwargs
+        :return:
+
+        Example:
+            >>> match_phrase_query(query="search engine", fields=["title", "summary"], slop=3)
+        """
+        try:
+            fields = kwargs["fields"]
+            slop = kwargs["slop"]
+
+            body = {
+                "query": {
+                    "multi_match": {
+                        "query": query,
+                        "fields": fields,
+                        "type": "phrase",
+                        "slop": slop
                     }
                 }
             }
