@@ -1,6 +1,6 @@
 from elasticsearch import Elasticsearch
 from elasticsearch import helpers
-from elasticsearch_dsl import Search, Q
+from elasticsearch_dsl import Search, Q, UpdateByQuery
 
 from settings import ELASTIC_INDEX, ELASTIC_DOC, ELASTIC_HOSTNAME, ELASTIC_PORT
 
@@ -393,5 +393,37 @@ class ElasticBookStorage(object):
                 Q("multi_match", query=query, fields=fields)
             )
             retrieved_items.delete()
+        except Exception as ex:
+            print(ex)
+
+    def update_by_query(self, **kwargs):
+        """
+        This function is used to update ElasticSearch entries by record
+
+        :param kwargs: provided kwargs
+        :return:
+
+        Example:
+            >>> update_by_query(search_fields="publisher", query="oreilly", field_to_update="publisher", new_value="OnMedia")
+        """
+        try:
+            client = Elasticsearch()
+            ubq = UpdateByQuery(
+                using=client,
+                index=self.book_index
+            )
+
+            search_fields = kwargs["search_fields"]
+            query = kwargs["query"]
+            field_to_update = kwargs["field_to_update"]
+            new_value = kwargs["new_value"]
+
+            ubq.query(
+                "multi_match",
+                query=query,
+                fields=search_fields
+            ).script(
+                source="ctx._source.{}='{}'".format(field_to_update, new_value)
+            ).execute()
         except Exception as ex:
             print(ex)
