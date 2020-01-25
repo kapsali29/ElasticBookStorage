@@ -427,3 +427,39 @@ class ElasticBookStorage(object):
             ).execute()
         except Exception as ex:
             print(ex)
+
+    def query_combination(self, **kwargs):
+        """
+        This function performs Combined bool queries
+
+        :param kwargs: provided kwargs
+        :return:
+
+        Example:
+            >>> should=[["title", "Elasticsearch"], ["title", "Solr"]],
+            >>> must=[["authors", "clinton gormely"]],
+            >>> must_not=[["authors", "radu george"]]
+            >>> query_combination(should, must, must_not)
+
+        """
+        try:
+            client = Elasticsearch()
+
+            s = Search(using=client, index=self.book_index)
+
+            q = Q('bool',
+                  must=[
+                      Q({"multi_match": {"query": "{}".format(m[1]), "fields": ["{}".format(m[0])]}})
+                          for m in kwargs["must"]] if "must" in kwargs.keys() else [],
+
+                  should=[Q({"multi_match": {"query": "{}".format(m[1]), "fields": ["{}".format(m[0])]}})
+                          for m in kwargs["should"]] if "should" in kwargs.keys() else [],
+
+                  must_not=[Q({"multi_match": {"query": "{}".format(m[1]), "fields": ["{}".format(m[0])]}})
+                            for m in kwargs["must_not"]] if "must_not" in kwargs.keys() else [],
+                  minimum_should_match=1
+                  )
+            response = s.query(q).execute()["hits"]["hits"]
+            return response
+        except Exception as ex:
+            print(ex)
