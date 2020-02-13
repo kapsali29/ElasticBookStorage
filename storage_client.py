@@ -143,12 +143,13 @@ class ElasticBookStorage(object):
         except Exception as e:
             print(e)
 
-    def search_book_by_param(self, _source=[], *args):
+    def search_book_by_param(self, *args, _source=[]):
         """
         The following function is used to retrieve results from
         elastic search searching for books that contains in their title
 
         the provided query
+        :param _source: source argument
         :param query: provided query to search
         :return: results
 
@@ -211,7 +212,7 @@ class ElasticBookStorage(object):
         except Exception as ee:
             print(ee)
 
-    def wild_card_query(self, query, _source=[], *args):
+    def wild_card_query(self, query, *args, _source=[]):
         """
         This function is used to perform ElasticSearch wild card queries
 
