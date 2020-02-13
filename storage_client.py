@@ -244,7 +244,7 @@ class ElasticBookStorage(object):
         except Exception as ex:
             print(ex)
 
-    def regex_query(self, query, _source=[], *args):
+    def regex_query(self, query, *args, _source=[]):
         """
         Regexp queries allow you to specify more complex patterns than wildcard queries
 
@@ -269,7 +269,6 @@ class ElasticBookStorage(object):
                         "{}".format(field): {}
                     }
                 },
-                "_source": _source
             }
             results = self.es.search(index=self.book_index, body=body)["hits"]["hits"]
             return results
