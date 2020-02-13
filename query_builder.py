@@ -45,6 +45,9 @@ class QueryBuilder(object):
                     fields=kwargs['fields']
                 )
 
+            elif action == 'match_phrase_prefix':
+                results = self.client.match_phrase_prefix(query=kwargs['query'], slop=kwargs['slop'])
+
 
 
             return results
