@@ -212,7 +212,7 @@ class ElasticBookStorage(object):
         except Exception as ee:
             print(ee)
 
-    def wild_card_query(self, query, *args, _source=[]):
+    def wild_card_query(self, _source=[], **kwargs):
         """
         This function is used to perform ElasticSearch wild card queries
 
@@ -224,7 +224,8 @@ class ElasticBookStorage(object):
             >>> wild_card_query("authors", query="t*")
         """
         try:
-            field = args[0]
+            field = kwargs['term']
+            query = kwargs['query']
 
             body = {
                 "query": {
@@ -244,7 +245,7 @@ class ElasticBookStorage(object):
         except Exception as ex:
             print(ex)
 
-    def regex_query(self, query, *args, _source=[]):
+    def regex_query(self, _source=[], **kwargs):
         """
         Regexp queries allow you to specify more complex patterns than wildcard queries
 
@@ -256,7 +257,8 @@ class ElasticBookStorage(object):
             >>> regex_query("authors", query="t[a-z]*y")
         """
         try:
-            field = args[0]
+            field = kwargs['term'],
+            query = kwargs['query']
 
             body = {
                 "query": {
@@ -450,7 +452,7 @@ class ElasticBookStorage(object):
             q = Q('bool',
                   must=[
                       Q({"multi_match": {"query": "{}".format(m[1]), "fields": ["{}".format(m[0])]}})
-                          for m in kwargs["must"]] if "must" in kwargs.keys() else [],
+                      for m in kwargs["must"]] if "must" in kwargs.keys() else [],
 
                   should=[Q({"multi_match": {"query": "{}".format(m[1]), "fields": ["{}".format(m[0])]}})
                           for m in kwargs["should"]] if "should" in kwargs.keys() else [],

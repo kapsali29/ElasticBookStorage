@@ -33,7 +33,10 @@ class QueryBuilder(object):
                 results = self.client.fuzzy_queries(query=kwargs['query'], fields=kwargs['fields'])
 
             elif action == 'wild_card_query':
-                results = self.client.wild_card_query(kwargs['term'], kwargs['query'])
+                results = self.client.wild_card_query(term=kwargs['term'], query=kwargs['query'])
+
+            elif action == 'regex_query':
+
 
 
             return results
