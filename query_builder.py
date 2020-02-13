@@ -48,7 +48,8 @@ class QueryBuilder(object):
             elif action == 'match_phrase_prefix':
                 results = self.client.match_phrase_prefix(query=kwargs['query'], slop=kwargs['slop'])
 
-
+            elif action == 'term_query':
+                results = self.client.term_query(field=kwargs['field'], term=kwargs['term'])
 
             return results
         except Exception as ex:
