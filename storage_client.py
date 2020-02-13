@@ -245,7 +245,7 @@ class ElasticBookStorage(object):
         except Exception as ex:
             print(ex)
 
-    def regex_query(self, _source=[], **kwargs):
+    def regex_query(self,**kwargs):
         """
         Regexp queries allow you to specify more complex patterns than wildcard queries
 
@@ -277,7 +277,7 @@ class ElasticBookStorage(object):
         except Exception as ex:
             print(ex)
 
-    def match_phrase_query(self, query, _source=[], **kwargs):
+    def match_phrase_query(self, query, **kwargs):
         """
         The match phrase query requires that all the terms in the query string be present in the document,
         be in the order specified in the query string and be close to each other.
@@ -304,7 +304,7 @@ class ElasticBookStorage(object):
                         "slop": slop
                     }
                 },
-                "_source": _source
+                "_source": []
             }
             results = self.es.search(index=self.book_index, body=body)["hits"]["hits"]
             return results

@@ -36,6 +36,14 @@ class QueryBuilder(object):
                 results = self.client.wild_card_query(term=kwargs['term'], query=kwargs['query'])
 
             elif action == 'regex_query':
+                results = self.client.regex_query(term=kwargs['term'], query=kwargs['query'])
+
+            elif action == 'match_phrase_query':
+                results = self.client.match_phrase_query(
+                    query=kwargs['query'],
+                    slop=kwargs['slop'],
+                    fields=kwargs['fields']
+                )
 
 
 
