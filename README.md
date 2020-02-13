@@ -33,3 +33,5 @@ sudo chmod +x /usr/local/bin/docker-compose
 ```
 sudo docker-compose -f modules/docker-compose.yml up -d
 ```
+
+### Query builder
