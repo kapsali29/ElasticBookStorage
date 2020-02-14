@@ -17,12 +17,14 @@ class QueryBuilder(object):
                     num_reviews=kwargs['num_reviews'],
                     publish_date=kwargs['publish_date'],
                 )
+                results = None
 
             elif action == 'retrieve_book_by_id':
                 results = self.client.retrieve_book_by_id(book_id=kwargs['book_id'])
 
             elif action == 'remove_book_by_id':
                 self.client.remove_book_doc(book_id=kwargs['book_id'])
+                results = None
 
             elif action == 'search_book_by_parameter':
                 results = self.client.search_book_by_param(kwargs['field'], kwargs['query'])
@@ -51,6 +53,7 @@ class QueryBuilder(object):
 
             elif action == 'delete_by_query':
                 self.client.delete_by_query(fields=kwargs['fields'], query=kwargs['query'])
+                results = None
 
             elif action == 'update_by_query':
                 self.client.update_by_query(
