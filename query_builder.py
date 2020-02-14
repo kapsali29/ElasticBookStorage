@@ -1,3 +1,6 @@
+import csv
+import json
+
 from storage_client import ElasticBookStorage
 
 
@@ -17,12 +20,28 @@ class QueryBuilder(object):
             >>> json_results = builder.get_source(results)
         """
         if results:
+            json_results = [book['_source'] for book in results]
+            return json_results
 
-            if isinstance(results, list):
-                json_results = [book['_source'] for book in results]
-                return json_results
-            else:
-                return results
+    def save_results(self, results, file_name, file_type):
+        """
+        This function saves elastic search results to file.
+        The supported types are: csv, json, pickle
+
+        :param results: elasticsearch results
+        :param file_name: file name to store
+        :param file_type: file type to store
+
+        Example:
+            >>> builder = QueryBuilder()
+            >>> builder.save_results(results, "results", "csv")
+        """
+        if file_type == 'csv':
+            csv_filename = '{}.csv'.format(file_name)
+
+            with open(csv_filename, 'w', newline='') as file:
+                writer = csv.writer(file)
+                writer.writerows(results)
 
     def command(self, action, payload):
         """
