@@ -20,12 +20,12 @@ class QueryBuilder(object):
             json_results = [book['_source'] for book in results]
             return json_results
 
-    def command(self, action, **kwargs):
+    def command(self, action, payload):
         """
         This function is used to fetch elastic search results based on action parameter
 
         :param action: parameter
-        :param kwargs: kwargs
+        :param payload: provided payload
         :return: result
 
         Example:
@@ -36,64 +36,64 @@ class QueryBuilder(object):
             if action == 'append_book':
 
                 self.client.create_book_doc(
-                    title=kwargs['title'],
-                    authors=kwargs['authors'],
-                    summary=kwargs['summary'],
-                    publisher=kwargs['publisher'],
-                    num_reviews=kwargs['num_reviews'],
-                    publish_date=kwargs['publish_date'],
+                    title=payload['title'],
+                    authors=payload['authors'],
+                    summary=payload['summary'],
+                    publisher=payload['publisher'],
+                    num_reviews=payload['num_reviews'],
+                    publish_date=payload['publish_date'],
                 )
                 results = None
 
             elif action == 'retrieve_book_by_id':
-                results = self.client.retrieve_book_by_id(book_id=kwargs['book_id'])
+                results = self.client.retrieve_book_by_id(book_id=payload['book_id'])
 
             elif action == 'remove_book_by_id':
-                self.client.remove_book_doc(book_id=kwargs['book_id'])
+                self.client.remove_book_doc(book_id=payload['book_id'])
                 results = None
 
             elif action == 'search_book_by_parameter':
-                results = self.client.search_book_by_param(kwargs['field'], kwargs['query'])
+                results = self.client.search_book_by_param(payload['field'], payload['query'])
 
             elif action == 'fuzzy_queries':
-                results = self.client.fuzzy_queries(query=kwargs['query'], fields=kwargs['fields'])
+                results = self.client.fuzzy_queries(query=payload['query'], fields=payload['fields'])
 
             elif action == 'wild_card_query':
-                results = self.client.wild_card_query(field=kwargs['field'], query=kwargs['query'])
+                results = self.client.wild_card_query(field=payload['field'], query=payload['query'])
 
             elif action == 'regex_query':
-                results = self.client.regex_query(field=kwargs['field'], query=kwargs['query'])
+                results = self.client.regex_query(field=payload['field'], query=payload['query'])
 
             elif action == 'match_phrase_query':
                 results = self.client.match_phrase_query(
-                    query=kwargs['query'],
-                    slop=kwargs['slop'],
-                    fields=kwargs['fields']
+                    query=payload['query'],
+                    slop=payload['slop'],
+                    fields=payload['fields']
                 )
 
             elif action == 'match_phrase_prefix':
-                results = self.client.match_phrase_prefix(query=kwargs['query'], slop=kwargs['slop'])
+                results = self.client.match_phrase_prefix(query=payload['query'], slop=payload['slop'])
 
             elif action == 'term_query':
-                results = self.client.term_query(field=kwargs['field'], term=kwargs['term'])
+                results = self.client.term_query(field=payload['field'], term=payload['term'])
 
             elif action == 'delete_by_query':
-                self.client.delete_by_query(fields=kwargs['fields'], query=kwargs['query'])
+                self.client.delete_by_query(fields=payload['fields'], query=payload['query'])
                 results = None
 
             elif action == 'update_by_query':
                 self.client.update_by_query(
-                    fields=kwargs['fields'],
-                    query=kwargs['query'],
-                    field_to_update=kwargs['field_to_update'],
-                    new_value=kwargs['new_value']
+                    fields=payload['fields'],
+                    query=payload['query'],
+                    field_to_update=payload['field_to_update'],
+                    new_value=payload['new_value']
                 )
 
             elif action == 'bool_query':
                 results = self.client.query_combination(
-                    should=kwargs['should'],
-                    must=kwargs['must'],
-                    must_not=kwargs['must_not']
+                    should=payload['should'],
+                    must=payload['must'],
+                    must_not=payload['must_not']
                 )
 
             return results

@@ -1,7 +1,10 @@
 from flask import Flask, request, jsonify
 
+from query_builder import QueryBuilder
 
 app = Flask(__name__)
+
+builder = QueryBuilder()
 
 
 @app.route('/ask/storage/', methods=['POST'])
@@ -10,4 +13,5 @@ def ask_elastic_storage():
     if 'action' not in data.keys():
         return 'action not in request body', 400
     else:
-        return jsonify({'status':'ok'})
+        elastic_results = builder.command(action=data['action'], payload=data)
+        return jsonify(elastic_results)
