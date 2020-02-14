@@ -17,8 +17,12 @@ class QueryBuilder(object):
             >>> json_results = builder.get_source(results)
         """
         if results:
-            json_results = [book['_source'] for book in results]
-            return json_results
+
+            if isinstance(results, list):
+                json_results = [book['_source'] for book in results]
+                return json_results
+            else:
+                return results
 
     def command(self, action, payload):
         """

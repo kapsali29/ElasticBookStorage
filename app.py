@@ -14,4 +14,5 @@ def ask_elastic_storage():
         return 'action not in request body', 400
     else:
         elastic_results = builder.command(action=data['action'], payload=data)
-        return jsonify(elastic_results)
+        json_results = builder.get_source(elastic_results)
+        return jsonify(json_results)
