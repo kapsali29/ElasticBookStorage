@@ -224,7 +224,7 @@ class ElasticBookStorage(object):
             >>> wild_card_query("authors", query="t*")
         """
         try:
-            field = kwargs['term']
+            field = kwargs['field']
             query = kwargs['query']
 
             body = {
@@ -257,7 +257,7 @@ class ElasticBookStorage(object):
             >>> regex_query("authors", query="t[a-z]*y")
         """
         try:
-            field = kwargs['term'],
+            field = kwargs['field'],
             query = kwargs['query']
 
             body = {

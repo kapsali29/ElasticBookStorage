@@ -27,16 +27,16 @@ class QueryBuilder(object):
                 results = 'Book deleted'
 
             elif action == 'search_book_by_parameter':
-                results = self.client.search_book_by_param(kwargs['term'], kwargs['query'])
+                results = self.client.search_book_by_param(kwargs['field'], kwargs['query'])
 
             elif action == 'fuzzy_queries':
                 results = self.client.fuzzy_queries(query=kwargs['query'], fields=kwargs['fields'])
 
             elif action == 'wild_card_query':
-                results = self.client.wild_card_query(term=kwargs['term'], query=kwargs['query'])
+                results = self.client.wild_card_query(field=kwargs['field'], query=kwargs['query'])
 
             elif action == 'regex_query':
-                results = self.client.regex_query(term=kwargs['term'], query=kwargs['query'])
+                results = self.client.regex_query(field=kwargs['field'], query=kwargs['query'])
 
             elif action == 'match_phrase_query':
                 results = self.client.match_phrase_query(
