@@ -63,6 +63,13 @@ class QueryBuilder(object):
                     new_value=kwargs['new_value']
                 )
 
+            elif action == 'bool_query':
+                results = self.client.query_combination(
+                    should=kwargs['should'],
+                    must=kwargs['must'],
+                    must_not=kwargs['must_not']
+                )
+
             return results
         except Exception as ex:
             print(ex)
