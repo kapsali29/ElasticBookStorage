@@ -406,7 +406,7 @@ class ElasticBookStorage(object):
         :return:
 
         Example:
-            >>> update_by_query(search_fields="publisher", query="oreilly", field_to_update="publisher", new_value="OnMedia")
+            >>> update_by_query(fields="publisher", query="oreilly", field_to_update="publisher", new_value="OnMedia")
         """
         try:
             client = Elasticsearch()
@@ -415,7 +415,7 @@ class ElasticBookStorage(object):
                 index=self.book_index
             )
 
-            search_fields = kwargs["search_fields"]
+            search_fields = kwargs["fields"]
             query = kwargs["query"]
             field_to_update = kwargs["field_to_update"]
             new_value = kwargs["new_value"]
