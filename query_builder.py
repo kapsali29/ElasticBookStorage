@@ -5,7 +5,33 @@ class QueryBuilder(object):
     def __init__(self):
         self.client = ElasticBookStorage()
 
+    def get_source(self, results):
+        """
+        This function is used to get results from elasticsearch response
+
+        :param results: elasticsearch response
+        :return: json results
+
+        Example:
+            >>> builder = QueryBuilder()
+            >>> json_results = builder.get_source(results)
+        """
+        if results:
+            json_results = [book['_source'] for book in results]
+            return json_results
+
     def command(self, action, **kwargs):
+        """
+        This function is used to fetch elastic search results based on action parameter
+
+        :param action: parameter
+        :param kwargs: kwargs
+        :return: result
+
+        Example:
+            >>> builder = QueryBuilder()
+            >>> results = builder.command(action='fuzzy_queries', query='comprehesiv guide', fields=['title', 'summary'])
+        """
         try:
             if action == 'append_book':
 
