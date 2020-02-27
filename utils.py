@@ -37,10 +37,17 @@ def save_json_to_file(json_data, filename):
 
 
 def save_attr_dict_to_csv(attrdict, filename):
+    """
+    This function is used to store elastic search response to CSV
+    :param attrdict: elasticsearch response
+    :param filename: file name to save
+    :return: None
+    """
     with open(filename, 'w') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=COLUMNS)
 
         for attr_data in attrdict:
             to_dict = attr_data.__dict__['_d_']
+
             writer.writeheader()
             writer.writerow(to_dict)

@@ -44,7 +44,7 @@ class QueryBuilder(object):
             save_json_to_file(jsonified_data, file)
 
         elif file_type == "csv":
-            save_attr_dict_to_csv(prepared_data, file)
+            save_attr_dict_to_csv(prepared_data, file)  # save data as CSV
         else:
             print("this type is not supported")
 
