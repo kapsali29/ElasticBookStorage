@@ -18,9 +18,11 @@ DATA = [
      "publish_date": "2015-12-03", "num_reviews": 18, "publisher": "manning"},
 ]
 
-elk = ElasticBookStorage()
-elk.create_book_index()
 
-elk.bulk_insert(data=DATA)
+if __name__ == "__main__":
+    elk = ElasticBookStorage()
+    elk.create_book_index()
+
+    elk.bulk_insert(data=DATA)
 
 
