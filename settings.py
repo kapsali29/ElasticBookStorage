@@ -8,4 +8,4 @@ ELASTIC_PORT = 9200
 API_PORT = 5000
 
 # Data Columns
-COLUMNS = ["pk", "model", "codename", "name", "content_type"]
+COLUMNS = ["title", "authors", "summary", "publish_date", "num_reviews", "publisher"]

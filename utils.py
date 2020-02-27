@@ -1,4 +1,7 @@
+import csv
 import json
+
+from settings import COLUMNS
 
 
 def prepare_for_save(attr_dict_data):
@@ -31,3 +34,13 @@ def save_json_to_file(json_data, filename):
     """
     with open(filename, 'w') as f:
         json.dump(json_data, f)
+
+
+def save_attr_dict_to_csv(attrdict, filename):
+    with open(filename, 'w') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=COLUMNS)
+
+        for attr_data in attrdict:
+            to_dict = attr_data.__dict__['_d_']
+            writer.writeheader()
+            writer.writerow(to_dict)

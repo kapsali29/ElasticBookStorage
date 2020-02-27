@@ -1,8 +1,5 @@
-import csv
-import json
-
 from storage_client import ElasticBookStorage
-from utils import prepare_for_save, toJSON, save_json_to_file
+from utils import prepare_for_save, toJSON, save_json_to_file, save_attr_dict_to_csv
 
 
 class QueryBuilder(object):
@@ -10,7 +7,7 @@ class QueryBuilder(object):
         self.client = ElasticBookStorage()
 
     @staticmethod
-    def get_source(self, results):
+    def get_source(results):
         """
         This function is used to get results from elasticsearch response
 
@@ -26,7 +23,7 @@ class QueryBuilder(object):
             return json_results
 
     @staticmethod
-    def save_results(self, results, file_name, file_type):
+    def save_results(results, file_name, file_type):
         """
         This function saves elastic search results to file.
         The supported types are: csv, json, pickle
@@ -39,13 +36,17 @@ class QueryBuilder(object):
             >>> builder = QueryBuilder()
             >>> builder.save_results(results, "results", "csv")
         """
+        prepared_data = prepare_for_save(results)  # modify actors field
+        file = "{}.{}".format(file_name, file_type)
+
         if file_type == "json":
-            file = "{}.json".format(file_name)
-
-            prepared_data = prepare_for_save(results)  # modify actors field
             jsonified_data = toJSON(prepared_data)  # jsonify data from ELK
-
             save_json_to_file(jsonified_data, file)
+
+        elif file_type == "csv":
+            save_attr_dict_to_csv(prepared_data, file)
+        else:
+            print("this type is not supported")
 
     def command(self, action, payload):
         """
