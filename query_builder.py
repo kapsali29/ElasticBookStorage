@@ -2,12 +2,14 @@ import csv
 import json
 
 from storage_client import ElasticBookStorage
+from utils import prepare_for_save, toJSON, save_json_to_file
 
 
 class QueryBuilder(object):
     def __init__(self):
         self.client = ElasticBookStorage()
 
+    @staticmethod
     def get_source(self, results):
         """
         This function is used to get results from elasticsearch response
@@ -23,6 +25,7 @@ class QueryBuilder(object):
             json_results = [book['_source'] for book in results]
             return json_results
 
+    @staticmethod
     def save_results(self, results, file_name, file_type):
         """
         This function saves elastic search results to file.
@@ -36,12 +39,13 @@ class QueryBuilder(object):
             >>> builder = QueryBuilder()
             >>> builder.save_results(results, "results", "csv")
         """
-        if file_type == 'csv':
-            csv_filename = '{}.csv'.format(file_name)
+        if file_type == "json":
+            file = "{}.json".format(file_name)
 
-            with open(csv_filename, 'w', newline='') as file:
-                writer = csv.writer(file)
-                writer.writerows(results)
+            prepared_data = prepare_for_save(results)  # modify actors field
+            jsonified_data = toJSON(prepared_data)  # jsonify data from ELK
+
+            save_json_to_file(jsonified_data, file)
 
     def command(self, action, payload):
         """

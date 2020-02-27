@@ -6,3 +6,6 @@ ELASTIC_PORT = 9200
 
 # API Settings
 API_PORT = 5000
+
+# Data Columns
+COLUMNS = ["pk", "model", "codename", "name", "content_type"]
