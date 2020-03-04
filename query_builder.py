@@ -129,6 +129,12 @@ class QueryBuilder(object):
                     field=payload['field'],
                     range=payload['range']
                 )
+
+            elif action == 'metric_aggregations':
+                results = self.client.metric_aggregations(
+                    field=payload['field'],
+                    metric=payload['metric']
+                )
             return results
         except Exception as ex:
             print(ex)
