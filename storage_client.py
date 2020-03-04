@@ -245,7 +245,7 @@ class ElasticBookStorage(object):
         except Exception as ex:
             print(ex)
 
-    def regex_query(self,**kwargs):
+    def regex_query(self, **kwargs):
         """
         Regexp queries allow you to specify more complex patterns than wildcard queries
 
@@ -463,5 +463,31 @@ class ElasticBookStorage(object):
                   )
             response = s.query(q).execute()["hits"]["hits"]
             return response
+        except Exception as ex:
+            print(ex)
+
+    def range_query(self, **kwargs):
+        """
+        The following function is used to fetch elastic search records based on range queries
+
+        :param kwargs: provided kwargs
+        :return: elastic search response
+
+        Examples:
+            >>> range_query(field='publish_date', range={"gte": "2015-01-01","lte": "2015-12-31"})
+        """
+        field = kwargs['field']
+        ranges = kwargs['range']
+
+        try:
+            body = {
+                "query": {
+                    "range": {
+                        "{}".format(field): ranges
+                    }
+                },
+            }
+            results = self.es.search(index=self.book_index, body=body)["hits"]["hits"]
+            return results
         except Exception as ex:
             print(ex)
