@@ -124,6 +124,11 @@ class QueryBuilder(object):
                     must_not=payload['must_not']
                 )
 
+            elif action == 'range_query':
+                results = self.client.range_query(
+                    field=payload['field'],
+                    range=payload['range']
+                )
             return results
         except Exception as ex:
             print(ex)
