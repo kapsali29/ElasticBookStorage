@@ -2,7 +2,7 @@ from elasticsearch import Elasticsearch
 from elasticsearch import helpers
 from elasticsearch_dsl import Search, Q, UpdateByQuery
 
-from settings import ELASTIC_INDEX, ELASTIC_DOC, ELASTIC_HOSTNAME, ELASTIC_PORT
+from settings import ELASTIC_INDEX, ELASTIC_DOC, ELASTIC_HOSTNAME, ELASTIC_PORT, HITS_SIZE
 
 
 # https://dzone.com/articles/23-useful-elasticsearch-example-queries
@@ -138,7 +138,7 @@ class ElasticBookStorage(object):
             >>> results = elk.basic_match_query(query="guide")
         """
         try:
-            results = self.es.search(index=self.book_index, q=query)["hits"]["hits"]
+            results = self.es.search(index=self.book_index, q=query, size=HITS_SIZE)["hits"]["hits"]
             return results
         except Exception as e:
             print(e)
@@ -170,7 +170,7 @@ class ElasticBookStorage(object):
                 },
                 "_source": _source
             }
-            results = self.es.search(index=self.book_index, body=body)["hits"]["hits"]
+            results = self.es.search(index=self.book_index, body=body, size=HITS_SIZE)["hits"]["hits"]
             return results
         except Exception as ee:
             print(ee)
@@ -207,7 +207,7 @@ class ElasticBookStorage(object):
                 "size": 1
             }
 
-            results = self.es.search(index=self.book_index, body=body)["hits"]["hits"]
+            results = self.es.search(index=self.book_index, body=body, size=HITS_SIZE)["hits"]["hits"]
             return results
         except Exception as ee:
             print(ee)
@@ -240,7 +240,7 @@ class ElasticBookStorage(object):
                 },
                 "_source": _source
             }
-            results = self.es.search(index=self.book_index, body=body)["hits"]["hits"]
+            results = self.es.search(index=self.book_index, body=body, size=HITS_SIZE)["hits"]["hits"]
             return results
         except Exception as ex:
             print(ex)
@@ -272,7 +272,7 @@ class ElasticBookStorage(object):
                     }
                 },
             }
-            results = self.es.search(index=self.book_index, body=body)["hits"]["hits"]
+            results = self.es.search(index=self.book_index, body=body, size=HITS_SIZE)["hits"]["hits"]
             return results
         except Exception as ex:
             print(ex)
@@ -306,7 +306,7 @@ class ElasticBookStorage(object):
                 },
                 "_source": []
             }
-            results = self.es.search(index=self.book_index, body=body)["hits"]["hits"]
+            results = self.es.search(index=self.book_index, body=body, size=HITS_SIZE)["hits"]["hits"]
             return results
         except Exception as ex:
             print(ex)
@@ -339,7 +339,7 @@ class ElasticBookStorage(object):
                 },
                 "_source": _source
             }
-            results = self.es.search(index=self.book_index, body=body)["hits"]["hits"]
+            results = self.es.search(index=self.book_index, body=body, size=HITS_SIZE)["hits"]["hits"]
             return results
         except Exception as ex:
             print(ex)
@@ -371,7 +371,7 @@ class ElasticBookStorage(object):
                 },
                 "_source": _source
             }
-            results = self.es.search(index=self.book_index, body=body)["hits"]["hits"]
+            results = self.es.search(index=self.book_index, body=body, size=HITS_SIZE)["hits"]["hits"]
             return results
         except Exception as ex:
             print(ex)
@@ -487,7 +487,7 @@ class ElasticBookStorage(object):
                     }
                 },
             }
-            results = self.es.search(index=self.book_index, body=body)["hits"]["hits"]
+            results = self.es.search(index=self.book_index, body=body, size=HITS_SIZE)["hits"]["hits"]
             return results
         except Exception as ex:
             print(ex)
