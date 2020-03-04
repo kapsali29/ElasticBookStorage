@@ -491,3 +491,33 @@ class ElasticBookStorage(object):
             return results
         except Exception as ex:
             print(ex)
+
+    def metric_aggregations(self, **kwargs):
+        """
+        The following function is used to return metric aggregations
+
+        :param kwargs: provided kwargs
+        :return: aggregated results
+
+        Examples:
+            >>> results = metric_aggregations(field='num_reviews', metric='min')
+        """
+
+        field = kwargs['field']
+        metric = kwargs['metric']
+
+        aggregation_name = "{}_{}".format(metric, field)
+
+        try:
+            body = {
+                "aggs": {
+                    "{}".format(aggregation_name): {
+                        "{}".format(metric): {"field": field}
+                    }
+                }
+            }
+
+            results = self.es.search(index=self.book_index, body=body, size=HITS_SIZE)["aggregations"]
+            return results
+        except Exception as ex:
+            print(ex)
