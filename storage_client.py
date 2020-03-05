@@ -517,7 +517,38 @@ class ElasticBookStorage(object):
                 }
             }
 
-            results = self.es.search(index=self.book_index, body=body, size=HITS_SIZE)["aggregations"]
+            results = self.es.search(index=self.book_index, body=body, size=0)["aggregations"]
+            return results
+        except Exception as ex:
+            print(ex)
+
+    def filter_aggregations(self, **kwargs):
+        """
+        This function is used to aggregate data from elastic search using term query
+
+        :param kwargs: provided kwargs
+        :return: aggregated bucket data
+        """
+
+        term = kwargs['term']
+        query = kwargs['query']
+        field = kwargs['field']
+        metric = kwargs['metric']
+
+        try:
+
+            body = {
+                "aggs": {
+                    "aggregated_data": {
+                        "filter": {"term": {"{}".format(term): query}},
+                        "aggs": {
+                            "{}_{}".format(metric, field): {"{}".format(metric): {"field": field}}
+                        }
+                    }
+                }
+            }
+
+            results = self.es.search(index=self.book_index, body=body, size=0)["aggregations"]
             return results
         except Exception as ex:
             print(ex)
