@@ -23,7 +23,7 @@ class QueryBuilder(object):
                 json_results = [book['_source'] for book in results]
                 return json_results
             else:
-                return results
+                return [results]
 
     @staticmethod
     def save_results(results, file_name, file_type):
