@@ -1,8 +1,10 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 from query_builder import QueryBuilder
 
 app = Flask(__name__)
+CORS(app)
 
 builder = QueryBuilder()
 
@@ -10,6 +12,7 @@ builder = QueryBuilder()
 @app.route('/ask/storage/', methods=['POST'])
 def ask_elastic_storage():
     data = request.get_json()
+
     if 'action' not in data.keys():
         return 'action not in request body', 400
     else:

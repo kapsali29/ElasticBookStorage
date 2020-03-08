@@ -45,9 +45,9 @@
       .fa-graduation-cap {
       font-size: 72px;
       }
-      form {
-      background: rgba(0, 0, 0, 0.7); 
-      }
+      /*.form-div {*/
+      /*background: rgba(0, 0, 0, 0.7); */
+      /*}*/
       .title {
       display: flex;
       align-items: center;
@@ -121,48 +121,69 @@
     </style>
   </head>
   <body>
+  <script type="text/javascript">
+    function setForm(value) {
+      if(value == 'retrieve_book_by_id'){
+        document.getElementById('retrieve_book_by_id').style='display:block;';
+        // document.getElementById('form2').style='display:none;';
+      } else {
+        // document.getElementById('form2').style = 'display:block;';
+        document.getElementById('retrieve_book_by_id').style = 'display:none;';
+      }
+    }
+
+</script>
     <div class="main-block">
       <div class="left-part">
         <i class="fas fa-graduation-cap"></i>
         <h1>Book Storage</h1>
+
+        <select id="select_input" onchange="setForm(this.value)">
+            <option value="retrieve_book_by_id" selected>Retrive Book By ID*</option>
+            <option value="short-courses">Short courses</option>
+          </select>
       </div>
-      <form action="result.html">
+
+      <div id="retrieve_book_by_id" class="form-div">
+<!--      <form action="result.html">-->
         <div class="title">
           <i class="fas fa-pencil-alt"></i> 
           <h2>Search Actions Here</h2>
         </div>
         <div class="info">
-          <input id="fname" class="fname" type="text" name="name" placeholder="Full name">
-          <input type="text" name="name" placeholder="Email">
-          <input type="text" name="name" placeholder="Phone number">
-          <input type="password" name="name" placeholder="Password">
-          <select>
-            <option value="course-type" selected>Course type*</option>
-            <option value="short-courses">Short courses</option>
-            <option value="featured-courses">Featured courses</option>
-            <option value="undergraduate">Undergraduate</option>
-            <option value="diploma">Diploma</option>
-            <option value="certificate">Certificate</option>
-            <option value="masters-degree">Masters degree</option>
-            <option value="postgraduate">Postgraduate</option>
-          </select>
+          <input id="book_id" class="fname" type="text" name="name" placeholder="Book ID">
         </div>
-        <!-- <div class="checkbox">
-          <input type="checkbox" name="checkbox"><span>I agree to the <a href="https://www.w3docs.com/privacy-policy">Privacy Poalicy for W3Docs.</a></span>
-        </div> -->
         <button id="submit_button" type="submit">Submit</button>
+      </div>
     </div>
-</form>
+
   </body>
 </html>
 
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.4.3.min.js" ></script>
+
 <script type="text/javascript">
+  var url = "http://127.0.0.1:5000/ask/storage/";
     $(document).ready(function(){
-        $("#submit_button").click( function()
-           {
-             console.log('button clicked');
-             document.location.href='result.html';
-           })
+      selected_div = $('#select_input').val();
+        $("#submit_button").click( function() {
+
+          if (selected_div == 'retrieve_book_by_id'){
+            $.ajax({
+                url: "http://127.0.0.1:5000/ask/storage/",
+                type: "POST",
+                dataType: 'json',
+                timeout: 0,
+                contentType: 'application/json',
+                data: JSON.stringify({"action":selected_div,"book_id":$('#book_id').val()}),
+                success: function(response){
+                    window.localStorage.setItem('response', JSON.stringify(response));
+                    window.location = 'result.html';
+                    console.log(response);
+                  },
+            })
+          }
+
+        })
     })
 </script>
