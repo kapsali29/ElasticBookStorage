@@ -34,7 +34,7 @@
       align-items: center;
       height: 100%;
       padding: 25px;
-      background: rgba(0, 0, 0, 0.5); 
+      background: rgba(0, 0, 0, 1.5);
       }
       .left-part, form {
       padding: 25px;
@@ -121,16 +121,21 @@
     </style>
   </head>
   <body>
+  <script type="text/javascript" src="http://code.jquery.com/jquery-1.4.3.min.js" ></script>
   <script type="text/javascript">
-    function setForm(value) {
-      if(value == 'retrieve_book_by_id'){
-        document.getElementById('retrieve_book_by_id').style='display:block;';
-        // document.getElementById('form2').style='display:none;';
-      } else {
-        // document.getElementById('form2').style = 'display:block;';
-        document.getElementById('retrieve_book_by_id').style = 'display:none;';
-      }
-    }
+          function setForm(value) {
+              if (value == 'retrieve_book_by_id') {
+                  $('#fuzzy_queries').hide()
+                  $('#retrieve_book_by_id').show()
+                  // document.getElementById('retrieve_book_by_id').style = 'display:block;';
+                  // document.getElementById('fuzzy_queries').style = 'display:none;';
+              } else if (value == 'fuzzy_queries') {
+                  $('#retrieve_book_by_id').hide()
+                  $('#fuzzy_queries').show()
+                  // document.getElementById('fuzzy_queries').style = 'display:block;';
+                  // document.getElementById('retrieve_book_by_id').style = 'display:none;';
+              }
+          }
 
 </script>
     <div class="main-block">
@@ -139,34 +144,53 @@
         <h1>Book Storage</h1>
 
         <select id="select_input" onchange="setForm(this.value)">
-            <option value="retrieve_book_by_id" selected>Retrive Book By ID*</option>
-            <option value="short-courses">Short courses</option>
+            <option value="retrieve_book_by_id" selected>Retrieve Book By ID*</option>
+            <option value="fuzzy_queries">Fuzzy Queries</option>
           </select>
+          <button id="submit_button" type="submit" class=".btn-item">Submit</button>
       </div>
 
       <div id="retrieve_book_by_id" class="form-div">
 <!--      <form action="result.html">-->
         <div class="title">
-          <i class="fas fa-pencil-alt"></i> 
+          <i class="fas fa-pencil-alt"></i>
           <h2>Search Actions Here</h2>
         </div>
         <div class="info">
           <input id="book_id" class="fname" type="text" name="name" placeholder="Book ID">
         </div>
-        <button id="submit_button" type="submit">Submit</button>
       </div>
-    </div>
 
+        <div id="fuzzy_queries" class="form-div">
+<!--      <form action="result.html">-->
+    <div class="title">
+      <i class="fas fa-pencil-alt"></i>
+      <h2>ElasticSearch Fuzzy Matching</h2>
+    </div>
+    <div class="info">
+      <input id="query" class="fname" type="text" name="name" placeholder="query">
+        <input id="fields" class="fname" type="text" name="name" placeholder="Fields">
+    </div>
+  </div>
+</div>
+    </div>
   </body>
 </html>
 
-<script type="text/javascript" src="http://code.jquery.com/jquery-1.4.3.min.js" ></script>
+<script type="text/javascript">
+    function showForms(){
+        $('#fuzzy_queries').hide();
+        $('#retrieve_book_by_id').show();
+    }
+</script>
 
 <script type="text/javascript">
   var url = "http://127.0.0.1:5000/ask/storage/";
     $(document).ready(function(){
-      selected_div = $('#select_input').val();
+        showForms();
         $("#submit_button").click( function() {
+
+            selected_div = $('#select_input').val();
 
           if (selected_div == 'retrieve_book_by_id'){
             $.ajax({
@@ -179,7 +203,20 @@
                 success: function(response){
                     window.localStorage.setItem('response', JSON.stringify(response));
                     window.location = 'result.html';
-                    console.log(response);
+                  },
+            })
+          } else if (selected_div == 'fuzzy_queries'){
+                          $.ajax({
+                              url: "http://127.0.0.1:5000/ask/storage/",
+                              type: "POST",
+                              dataType: 'json',
+                              timeout: 0,
+                              contentType: 'application/json',
+                              data: JSON.stringify({"action":selected_div,"query":$('#query').val(), "fields":$('#fields').val().split(',')}),
+                              success: function(response){
+                                  window.localStorage.setItem('response', JSON.stringify(response));
+                                  window.location = 'result.html';
+                                  console.log(response);
                   },
             })
           }
