@@ -124,33 +124,45 @@
   <script type="text/javascript" src="http://code.jquery.com/jquery-1.4.3.min.js" ></script>
   <script type="text/javascript">
           function setForm(value) {
-              if (value == 'retrieve_book_by_id') {
+
+              if (value === 'retrieve_book_by_id') {
                   $('#fuzzy_queries').hide();
                   $('#search_book_by_parameter').hide();
                   $('#match_phrase_prefix').hide();
+                  $('#regex').hide();
                   $('#retrieve_book_by_id').show();
 
                   // document.getElementById('retrieve_book_by_id').style = 'display:block;';
                   // document.getElementById('fuzzy_queries').style = 'display:none;';
-              } else if (value == 'fuzzy_queries') {
+              } else if (value === 'fuzzy_queries') {
                   $('#retrieve_book_by_id').hide();
                   $('#search_book_by_parameter').hide();
                   $('#match_phrase_prefix').hide();
+                  $('#regex').hide();
                   $('#fuzzy_queries').show();
                   // document.getElementById('fuzzy_queries').style = 'display:block;';
                   // document.getElementById('retrieve_book_by_id').style = 'display:none;';
-              } else if (value == 'search_book_by_parameter'){
+              } else if (value === 'search_book_by_parameter'){
                   $('#retrieve_book_by_id').hide();
                   $('#fuzzy_queries').hide();
                   $('#match_phrase_prefix').hide();
+                  $('#regex').hide();
                   $('#search_book_by_parameter').show();
 
-              } else if (value == 'match_phrase_prefix'){
+              } else if (value === 'match_phrase_prefix'){
 
                   $('#retrieve_book_by_id').hide();
                   $('#fuzzy_queries').hide();
                   $('#search_book_by_parameter').hide();
+                  $('#regex').hide();
                   $('#match_phrase_prefix').show();
+              } else if (value === 'regex'){
+                  $('#retrieve_book_by_id').hide();
+                  $('#fuzzy_queries').hide();
+                  $('#search_book_by_parameter').hide();
+                  $('#match_phrase_prefix').hide();
+                  $('#regex').show();
+              } else{
               }
           }
 
@@ -164,6 +176,7 @@
             <option value="retrieve_book_by_id" selected>Retrieve Book By ID*</option>
             <option value="search_book_by_parameter">Search Books By Parameter</option>
             <option value="fuzzy_queries">Fuzzy Queries</option>
+            <option value="regex">WildCard Query</option>
             <option value="match_phrase_prefix">Match Phrase Query</option>
           </select>
           <button id="submit_button" type="submit" class=".btn-item">Submit</button>
@@ -173,7 +186,7 @@
 <!--      <form action="result.html">-->
         <div class="title">
           <i class="fas fa-pencil-alt"></i>
-          <h2>Search Actions Here</h2>
+          <h2>Search Book By ID</h2>
         </div>
         <div class="info">
           <input id="book_id" class="fname" type="text" name="name" placeholder="Book ID">
@@ -184,7 +197,7 @@
 <!--      <form action="result.html">-->
     <div class="title">
       <i class="fas fa-pencil-alt"></i>
-      <h2>ElasticSearch Fuzzy Matching</h2>
+      <h2>Fuzzy Matching</h2>
     </div>
     <div class="info">
       <input id="query" class="fname" type="text" name="name" placeholder="query">
@@ -204,11 +217,21 @@
         <div id="match_phrase_prefix" class="form-div">
     <div class="title">
       <i class="fas fa-pencil-alt"></i>
-      <h2>Search Book By parameter</h2>
+      <h2>Match Phrase Prefix Query</h2>
     </div>
     <div class="info">
       <input id="match_phrase_q" class="fname" type="text" name="name" placeholder="query">
         <input id="slop" class="fname" type="text" name="name" placeholder="slop">
+    </div>
+  </div>
+        <div id="regex" class="form-div">
+    <div class="title">
+      <i class="fas fa-pencil-alt"></i>
+      <h2>WildCard Query</h2>
+    </div>
+    <div class="info">
+      <input id="wildcard_q" class="fname" type="text" name="name" placeholder="query">
+        <input id="wildcard_field" class="fname" type="text" name="name" placeholder="field">
     </div>
   </div>
 </div>
@@ -221,6 +244,7 @@
         $('#fuzzy_queries').hide();
         $('#search_book_by_parameter').hide();
         $('#match_phrase_prefix').hide();
+        $('#regex').hide();
         $('#retrieve_book_by_id').show();
     }
 </script>
@@ -232,6 +256,7 @@
         $("#submit_button").click( function() {
 
             selected_div = $('#select_input').val();
+            console.log(selected_div)
 
           if (selected_div == 'retrieve_book_by_id'){
             $.ajax({
@@ -289,9 +314,20 @@
                       console.log(response);
                   },
             })
-
-
-
+          } else if (selected_div == 'regex'){
+              $.ajax({
+                  url: "http://127.0.0.1:5000/ask/storage/",
+                  type: "POST",
+                  dataType: 'json',
+                  timeout: 0,
+                  contentType: 'application/json',
+                  data: JSON.stringify({"action":'wild_card_query',"field":$('#wildcard_field').val(), "query":$('#wildcard_q').val()}),
+                  success: function(response){
+                      window.localStorage.setItem('response', JSON.stringify(response));
+                      window.location = 'result.html';
+                      console.log(response);
+                  },
+            })
           }
 
         })
