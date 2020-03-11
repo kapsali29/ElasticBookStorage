@@ -127,6 +127,7 @@
               if (value == 'retrieve_book_by_id') {
                   $('#fuzzy_queries').hide();
                   $('#search_book_by_parameter').hide();
+                  $('#match_phrase_prefix').hide();
                   $('#retrieve_book_by_id').show();
 
                   // document.getElementById('retrieve_book_by_id').style = 'display:block;';
@@ -134,13 +135,22 @@
               } else if (value == 'fuzzy_queries') {
                   $('#retrieve_book_by_id').hide();
                   $('#search_book_by_parameter').hide();
+                  $('#match_phrase_prefix').hide();
                   $('#fuzzy_queries').show();
                   // document.getElementById('fuzzy_queries').style = 'display:block;';
                   // document.getElementById('retrieve_book_by_id').style = 'display:none;';
               } else if (value == 'search_book_by_parameter'){
                   $('#retrieve_book_by_id').hide();
                   $('#fuzzy_queries').hide();
+                  $('#match_phrase_prefix').hide();
                   $('#search_book_by_parameter').show();
+
+              } else if (value == 'match_phrase_prefix'){
+
+                  $('#retrieve_book_by_id').hide();
+                  $('#fuzzy_queries').hide();
+                  $('#search_book_by_parameter').hide();
+                  $('#match_phrase_prefix').show();
               }
           }
 
@@ -154,6 +164,7 @@
             <option value="retrieve_book_by_id" selected>Retrieve Book By ID*</option>
             <option value="search_book_by_parameter">Search Books By Parameter</option>
             <option value="fuzzy_queries">Fuzzy Queries</option>
+            <option value="match_phrase_prefix">Match Phrase Query</option>
           </select>
           <button id="submit_button" type="submit" class=".btn-item">Submit</button>
       </div>
@@ -190,6 +201,16 @@
         <input id="book_field" class="fname" type="text" name="name" placeholder="field">
     </div>
   </div>
+        <div id="match_phrase_prefix" class="form-div">
+    <div class="title">
+      <i class="fas fa-pencil-alt"></i>
+      <h2>Search Book By parameter</h2>
+    </div>
+    <div class="info">
+      <input id="match_phrase_q" class="fname" type="text" name="name" placeholder="query">
+        <input id="slop" class="fname" type="text" name="name" placeholder="slop">
+    </div>
+  </div>
 </div>
     </div>
   </body>
@@ -199,6 +220,7 @@
     function showForms(){
         $('#fuzzy_queries').hide();
         $('#search_book_by_parameter').hide();
+        $('#match_phrase_prefix').hide();
         $('#retrieve_book_by_id').show();
     }
 </script>
@@ -252,6 +274,24 @@
                       console.log(response);
                   },
             })
+          }
+          else if (selected_div == 'match_phrase_prefix'){
+              $.ajax({
+                  url: "http://127.0.0.1:5000/ask/storage/",
+                  type: "POST",
+                  dataType: 'json',
+                  timeout: 0,
+                  contentType: 'application/json',
+                  data: JSON.stringify({"action":selected_div,"slop":$('#slop').val(), "query":$('#match_phrase_q').val()}),
+                  success: function(response){
+                      window.localStorage.setItem('response', JSON.stringify(response));
+                      window.location = 'result.html';
+                      console.log(response);
+                  },
+            })
+
+
+
           }
 
         })
