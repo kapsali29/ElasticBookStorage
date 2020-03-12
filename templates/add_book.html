@@ -144,11 +144,18 @@ tr, td, th {
     <div class="main-block">
       <div class="left-part">
         <i class="fas fa-graduation-cap"></i>
-        <h1>Book Storage</h1>
-          <button id="search_button" type="submit" class=".btn-item">Search Books</button>
-          <button id="create_button" type="submit" class=".btn-item">Add Book</button>
-          <button id="update_delete_button" type="submit" class=".btn-item">Update/Delete Book</button>
-          <button id="metrics_button" type="submit" class=".btn-item">Aggregations</button>
+          <h1>Add Book</h1>
+          <div class="title">
+          <i class="fas fa-pencil-alt"></i>
+        </div>
+        <div class="info">
+          <input id="title" class="fname" type="text" name="name" placeholder="title">
+            <input id="authors" class="fname" type="text" name="name" placeholder="authors">
+            <input id="summary" class="fname" type="text" name="name" placeholder="summary">
+            <input id="publisher" class="fname" type="text" name="name" placeholder="publisher">
+            <input id="num_reviews" class="fname" type="text" name="name" placeholder="num_reviews">
+            <input id="publish_date" class="fname" type="text" name="name" placeholder="publish_date">
+        </div>
       </div>
               <div id="choices" class="form-div">
 
@@ -165,7 +172,7 @@ tr, td, th {
           window.location = 'form.html';
       });
         $("#create_button").click( function() {
-          window.location = 'add_book.html';
+          window.location = 'form.html';
       });
     })
 </script>
