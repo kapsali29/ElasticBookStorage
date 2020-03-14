@@ -122,6 +122,11 @@
   </head>
   <body>
   <script type="text/javascript" src="http://code.jquery.com/jquery-1.4.3.min.js" ></script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
   <script type="text/javascript">
           function setForm(value) {
 
@@ -132,6 +137,7 @@
                   $('#regex').hide();
                   $('#match_phrase_query').hide();
                   $('#term_query').hide();
+                  $('#range_query').hide();
                   $('#retrieve_book_by_id').show();
 
                   // document.getElementById('retrieve_book_by_id').style = 'display:block;';
@@ -143,6 +149,7 @@
                   $('#regex').hide();
                   $('#match_phrase_query').hide();
                   $('#term_query').hide();
+                  $('#range_query').hide();
                   $('#fuzzy_queries').show();
                   // document.getElementById('fuzzy_queries').style = 'display:block;';
                   // document.getElementById('retrieve_book_by_id').style = 'display:none;';
@@ -153,6 +160,7 @@
                   $('#regex').hide();
                   $('#match_phrase_query').hide();
                   $('#term_query').hide();
+                  $('#range_query').hide();
                   $('#search_book_by_parameter').show();
 
               } else if (value === 'match_phrase_prefix'){
@@ -163,6 +171,7 @@
                   $('#regex').hide();
                   $('#match_phrase_query').hide();
                   $('#term_query').hide();
+                  $('#range_query').hide();
                   $('#match_phrase_prefix').show();
 
               } else if (value === 'regex'){
@@ -172,6 +181,7 @@
                   $('#match_phrase_prefix').hide();
                   $('#match_phrase_query').hide();
                   $('#term_query').hide();
+                  $('#range_query').hide();
                   $('#regex').show();
               } else if (value === 'match_phrase_query'){
 
@@ -180,6 +190,7 @@
                   $('#search_book_by_parameter').hide();
                   $('#match_phrase_prefix').hide();
                   $('#regex').hide();
+                  $('#range_query').hide();
                   $('#match_phrase_query').show();
               } else if (value === 'term_query'){
                   $('#retrieve_book_by_id').hide();
@@ -188,7 +199,17 @@
                   $('#match_phrase_prefix').hide();
                   $('#regex').hide();
                   $('#match_phrase_query').hide();
+                  $('#range_query').hide();
                   $('#term_query').show();
+              } else if (value === 'range_query'){
+                  $('#retrieve_book_by_id').hide();
+                  $('#fuzzy_queries').hide();
+                  $('#search_book_by_parameter').hide();
+                  $('#match_phrase_prefix').hide();
+                  $('#regex').hide();
+                  $('#match_phrase_query').hide();
+                  $('#term_query').hide();
+                  $('#range_query').show();
               }
           }
 
@@ -206,6 +227,7 @@
             <option value="match_phrase_query">Match Phrase Query</option>
             <option value="match_phrase_prefix">Match Phrase Prefix Query</option>
             <option value="term_query">Term Query</option>
+            <option value="range_query">Range Query</option>
 
           </select>
           <button id="submit_button" type="submit" class=".btn-item">Submit</button>
@@ -284,6 +306,15 @@
         <input id="term_field" class="fname" type="text" name="name" placeholder="field">
     </div>
   </div>
+        <div id="range_query" class="form-div">
+    <div class="title">
+      <i class="fas fa-pencil-alt"></i>
+      <h2>Range Query</h2>
+    </div>
+    <div class="info">
+        <input id="range" type="text" name="daterange" value="01/03/2019 - 01/03/2019" />
+    </div>
+  </div>
 </div>
     </div>
   </body>
@@ -297,6 +328,7 @@
         $('#regex').hide();
         $('#term_query').hide();
         $('#match_phrase_query').hide();
+        $('#range_query').hide();
         $('#retrieve_book_by_id').show();
     }
 </script>
@@ -308,7 +340,6 @@
         $("#submit_button").click( function() {
 
             selected_div = $('#select_input').val();
-            console.log(selected_div)
 
           if (selected_div == 'retrieve_book_by_id'){
             $.ajax({
@@ -402,7 +433,6 @@
               } else {
                   data = selected_terms
               }
-              console.log(data)
               $.ajax({
                   url: "http://127.0.0.1:5000/ask/storage/",
                   type: "POST",
@@ -416,6 +446,29 @@
                       console.log(response);
                   },
             })
+          } else if (selected_div == 'range_query'){
+              console.log(selected_div);
+
+              $('input[name="daterange"]').daterangepicker({
+                opens: 'left'
+              }, function(start, end, label) {
+                  start_date = start.format('YYYY-MM-DD');
+                  end_date = end.format('YYYY-MM-DD');
+
+                  $.ajax({
+                  url: "http://127.0.0.1:5000/ask/storage/",
+                  type: "POST",
+                  dataType: 'json',
+                  timeout: 0,
+                  contentType: 'application/json',
+                  data: JSON.stringify({"action":selected_div,"field":"publish_date", "range": {gte: start_date, lte: end_date}}),
+                  success: function(response){
+                      window.localStorage.setItem('response', JSON.stringify(response));
+                      window.location = 'result.html';
+                      console.log(response);
+                  },
+            })
+              });
           }
         })
     })
