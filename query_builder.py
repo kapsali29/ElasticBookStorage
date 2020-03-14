@@ -121,11 +121,16 @@ class QueryBuilder(object):
                 )
 
             elif action == 'bool_query':
-                results = self.client.query_combination(
-                    should=payload['should'],
-                    must=payload['must'],
-                    must_not=payload['must_not']
-                )
+
+                data = dict()
+                if 'should' in payload.keys():
+                    data['should'] = payload['should']
+                if 'must' in payload.keys():
+                    data['must'] = payload['must']
+                if 'must_not' in payload.keys():
+                    data['must_not'] = payload['must_not']
+
+                results = self.client.query_combination(**data)
 
             elif action == 'range_query':
                 results = self.client.range_query(

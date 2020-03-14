@@ -462,7 +462,8 @@ class ElasticBookStorage(object):
                   minimum_should_match=1
                   )
             response = s.query(q).execute()["hits"]["hits"]
-            return response
+            return response.__dict__['_l_']
+
         except Exception as ex:
             print(ex)
 

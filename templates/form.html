@@ -138,6 +138,7 @@
                   $('#match_phrase_query').hide();
                   $('#term_query').hide();
                   $('#range_query').hide();
+                  $('#bool_query').hide();
                   $('#retrieve_book_by_id').show();
 
                   // document.getElementById('retrieve_book_by_id').style = 'display:block;';
@@ -150,6 +151,7 @@
                   $('#match_phrase_query').hide();
                   $('#term_query').hide();
                   $('#range_query').hide();
+                  $('#bool_query').hide();
                   $('#fuzzy_queries').show();
                   // document.getElementById('fuzzy_queries').style = 'display:block;';
                   // document.getElementById('retrieve_book_by_id').style = 'display:none;';
@@ -161,6 +163,7 @@
                   $('#match_phrase_query').hide();
                   $('#term_query').hide();
                   $('#range_query').hide();
+                  $('#bool_query').hide();
                   $('#search_book_by_parameter').show();
 
               } else if (value === 'match_phrase_prefix'){
@@ -172,6 +175,7 @@
                   $('#match_phrase_query').hide();
                   $('#term_query').hide();
                   $('#range_query').hide();
+                  $('#bool_query').hide();
                   $('#match_phrase_prefix').show();
 
               } else if (value === 'regex'){
@@ -182,6 +186,7 @@
                   $('#match_phrase_query').hide();
                   $('#term_query').hide();
                   $('#range_query').hide();
+                  $('#bool_query').hide();
                   $('#regex').show();
               } else if (value === 'match_phrase_query'){
 
@@ -191,6 +196,7 @@
                   $('#match_phrase_prefix').hide();
                   $('#regex').hide();
                   $('#range_query').hide();
+                  $('#bool_query').hide();
                   $('#match_phrase_query').show();
               } else if (value === 'term_query'){
                   $('#retrieve_book_by_id').hide();
@@ -200,6 +206,7 @@
                   $('#regex').hide();
                   $('#match_phrase_query').hide();
                   $('#range_query').hide();
+                  $('#bool_query').hide();
                   $('#term_query').show();
               } else if (value === 'range_query'){
                   $('#retrieve_book_by_id').hide();
@@ -209,7 +216,18 @@
                   $('#regex').hide();
                   $('#match_phrase_query').hide();
                   $('#term_query').hide();
+                  $('#bool_query').hide();
                   $('#range_query').show();
+              } else if (value === 'bool_query') {
+                  $('#retrieve_book_by_id').hide();
+                  $('#fuzzy_queries').hide();
+                  $('#search_book_by_parameter').hide();
+                  $('#match_phrase_prefix').hide();
+                  $('#regex').hide();
+                  $('#match_phrase_query').hide();
+                  $('#term_query').hide();
+                  $('#range_query').hide();
+                  $('#bool_query').show();
               }
           }
 
@@ -228,7 +246,7 @@
             <option value="match_phrase_prefix">Match Phrase Prefix Query</option>
             <option value="term_query">Term Query</option>
             <option value="range_query">Range Query</option>
-
+            <option value="bool_query">Bool Query</option>
           </select>
           <button id="submit_button" type="submit" class=".btn-item">Submit</button>
       </div>
@@ -299,7 +317,7 @@
         <div id="term_query" class="form-div">
     <div class="title">
       <i class="fas fa-pencil-alt"></i>
-      <h2>Term Query</h2>
+      <h2>ElasticSearch Term Query</h2>
     </div>
     <div class="info">
       <input id="terms" class="fname" type="text" name="name" placeholder="terms">
@@ -312,7 +330,18 @@
       <h2>Range Query</h2>
     </div>
     <div class="info">
-        <input id="range" type="text" name="daterange" value="01/03/2019 - 01/03/2019" />
+        <input id="range" type="text" name="daterange" value="01/03/2017 - 01/03/2019" />
+    </div>
+  </div>
+        <div id="bool_query" class="form-div">
+    <div class="title">
+      <i class="fas fa-pencil-alt"></i>
+      <h2>ElasticSearch Bool Query</h2>
+    </div>
+    <div class="info">
+        <input id="should" class="fname" type="text" name="name" placeholder="should">
+        <input id="must" class="fname" type="text" name="name" placeholder="must">
+        <input id="must_not" class="fname" type="text" name="name" placeholder="must_not">
     </div>
   </div>
 </div>
@@ -328,6 +357,7 @@
         $('#regex').hide();
         $('#term_query').hide();
         $('#match_phrase_query').hide();
+        $('#bool_query').hide();
         $('#range_query').hide();
         $('#retrieve_book_by_id').show();
     }
@@ -469,6 +499,40 @@
                   },
             })
               });
+          } else if (selected_div == 'bool_query'){
+              mustVval = $('#must').val();
+              shouldVal = $('#should').val();
+              mustNotVal = $('#must_not').val();
+
+              data = {};
+              data["action"] = selected_div;
+
+              if (mustVval != ""){
+                  must = mustVval.split(',').map(x=>x.split('='));
+                  data["must"] = must
+              }
+              if (shouldVal != ""){
+                  should = shouldVal.split(',').map(x=>x.split('='));
+                  data["should"] = should
+              }
+              if (mustNotVal != ""){
+                  must_not = mustNotVal.split(',').map(x=>x.split('='));
+                  data["must_not"] = must_not
+              }
+
+              $.ajax({
+                  url: "http://127.0.0.1:5000/ask/storage/",
+                  type: "POST",
+                  dataType: 'json',
+                  timeout: 0,
+                  contentType: 'application/json',
+                  data: JSON.stringify(data),
+                  success: function(response){
+                      window.localStorage.setItem('response', JSON.stringify(response));
+                      window.location = 'result.html';
+                      console.log(response);
+                  },
+            })
           }
         })
     })
