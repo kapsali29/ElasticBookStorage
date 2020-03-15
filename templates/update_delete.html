@@ -209,13 +209,31 @@
     </div>
   </body>
 </html>
-
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script type="text/javascript">
   var url = "http://127.0.0.1:5000/ask/storage/";
     $(document).ready(function(){
         showForms();
         $("#submit_button").click( function(){
+            selected_div = $('#select_input').val();
 
+            if (selected_div === 'remove_book_by_id'){
+                $.ajax({
+                url: "http://127.0.0.1:5000/ask/storage/",
+                type: "POST",
+                dataType: 'json',
+                timeout: 0,
+                contentType: 'application/json',
+                data: JSON.stringify({"action":selected_div,"book_id":$('#book_id').val()}),
+                success: function(response){
+                    swal({
+                        title: "Success!!",
+                        text: "Book with ID: "+ $('#book_id').val() + " removed from Elastic Book Storage!",
+                        type: "success"
+                    })
+                },
+            })
+            }
         });
     })
 </script>
