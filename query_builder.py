@@ -109,8 +109,7 @@ class QueryBuilder(object):
                 results = self.client.term_query(field=payload['field'], term=payload['term'])
 
             elif action == 'delete_by_query':
-                self.client.delete_by_query(fields=payload['fields'], query=payload['query'])
-                results = None
+                results = self.client.delete_by_query(fields=payload['fields'], query=payload['query'])
 
             elif action == 'update_by_query':
                 self.client.update_by_query(

@@ -395,6 +395,9 @@ class ElasticBookStorage(object):
                 Q("multi_match", query=query, fields=fields)
             )
             retrieved_items.delete()
+
+            results = {'count': retrieved_items.count()}
+            return results
         except Exception as ex:
             print(ex)
 
