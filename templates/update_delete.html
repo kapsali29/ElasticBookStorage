@@ -253,6 +253,25 @@
                     })
                 },
             })
+            } else if (selected_div === 'update_by_query'){
+                data = {"action": selected_div, "fields": $('#search_fields').val().split(','), "query": $('#search_query').val(), "field_to_update": $('#update_field').val(), "new_value": $('#new_value').val()};
+
+                $.ajax({
+                url: "http://127.0.0.1:5000/ask/storage/",
+                type: "POST",
+                dataType: 'json',
+                timeout: 0,
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function(response){
+                    updated_books = response[0]["updated"];
+                    swal({
+                        title: "Success!!",
+                        text: updated_books.toString() + " titles" + " updated in Elastic Book Storage!",
+                        type: "success"
+                    })
+                },
+            })
             }
         });
     })
