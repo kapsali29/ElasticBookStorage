@@ -149,12 +149,13 @@ tr, td, th {
           <i class="fas fa-pencil-alt"></i>
         </div>
         <div class="info">
-          <input id="title" class="fname" type="text" name="name" placeholder="title">
-            <input id="authors" class="fname" type="text" name="name" placeholder="authors">
-            <input id="summary" class="fname" type="text" name="name" placeholder="summary">
-            <input id="publisher" class="fname" type="text" name="name" placeholder="publisher">
-            <input id="num_reviews" class="fname" type="text" name="name" placeholder="num_reviews">
-            <input id="publish_date" class="fname" type="text" name="name" placeholder="publish_date">
+          <input id="title" class="fname" type="text" name="name" placeholder="title" required>
+            <input id="authors" class="fname" type="text" name="name" placeholder="authors" required>
+            <input id="summary" class="fname" type="text" name="name" placeholder="summary" required>
+            <input id="publisher" class="fname" type="text" name="name" placeholder="publisher" required>
+            <input id="num_reviews" class="fname" type="text" name="name" placeholder="num_reviews" required>
+            <input id="publish_date" class="fname" type="text" name="name" placeholder="publish_date" required>
+          <button id="create_book" type="submit" class=".btn-item">Add Book</button>
         </div>
       </div>
               <div id="choices" class="form-div">
@@ -166,13 +167,37 @@ tr, td, th {
 
 <script type="text/javascript" src="jquery-3.3.1.js" ></script>
 <script type="text/javascript" src="datatables.min.js" ></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function(){
-      $("#search_button").click( function() {
-          window.location = 'form.html';
-      });
-        $("#create_button").click( function() {
-          window.location = 'form.html';
+      $("#create_book").click( function() {
+        $.ajax({
+          url: "http://127.0.0.1:5000/ask/storage/",
+          type: "POST",
+          dataType: 'json',
+          timeout: 0,
+          contentType: 'application/json',
+          data: JSON.stringify({
+            "action":"append_book",
+            "title": $('#title').val(),
+            "authors": $('#authors').val().split(','),
+            "summary": $('#summary').val(),
+            "publisher": $('#publisher').val(),
+            "num_reviews": $('#num_reviews').val(),
+            "publish_date": $('#publish_date').val()
+          }),
+          success: function(response){
+            console.log('book created');
+            swal({
+              title: "Success!!",
+              text: "Book: "+ $('#title').val() + "added to Elastic Book Storage!",
+            type: "success"
+            }).then(function() {
+            window.location.href = "entry_screen.html";
+            console.log('The Ok Button was clicked.');
+            });
+            },
+            })
       });
     })
 </script>
