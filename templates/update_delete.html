@@ -233,6 +233,25 @@
                     })
                 },
             })
+            } else if (selected_div === 'delete_by_query'){
+                data = {"action":selected_div,"query":$('#delete_query').val(), "fields": $('#delete_fields').val().split(',')}
+                console.log(data);
+                $.ajax({
+                url: "http://127.0.0.1:5000/ask/storage/",
+                type: "POST",
+                dataType: 'json',
+                timeout: 0,
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function(response){
+                    removed_books = response[0]["count"];
+                    swal({
+                        title: "Success!!",
+                        text: removed_books.toString() + " titles" + " removed from Elastic Book Storage!",
+                        type: "success"
+                    })
+                },
+            })
             }
         });
     })
