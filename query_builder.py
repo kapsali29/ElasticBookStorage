@@ -112,7 +112,7 @@ class QueryBuilder(object):
                 results = self.client.delete_by_query(fields=payload['fields'], query=payload['query'])
 
             elif action == 'update_by_query':
-                self.client.update_by_query(
+                results = self.client.update_by_query(
                     fields=payload['fields'],
                     query=payload['query'],
                     field_to_update=payload['field_to_update'],

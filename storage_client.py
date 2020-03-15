@@ -423,13 +423,15 @@ class ElasticBookStorage(object):
             field_to_update = kwargs["field_to_update"]
             new_value = kwargs["new_value"]
 
-            ubq.query(
+            update_query = ubq.query(
                 "multi_match",
                 query=query,
                 fields=search_fields
             ).script(
                 source="ctx._source.{}='{}'".format(field_to_update, new_value)
-            ).execute()
+            )
+            results = update_query.execute()._d_
+            return results
         except Exception as ex:
             print(ex)
 
