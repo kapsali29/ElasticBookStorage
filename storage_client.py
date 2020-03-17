@@ -17,8 +17,8 @@ class ElasticBookStorage(object):
 
         self.es = Elasticsearch([{
             'host': self.ELK_HOSTNAME,
-            'port': self.ELK_PORT}]
-        )
+            'port': self.ELK_PORT
+        }])
 
     def create_book_index(self):
         """

@@ -17,6 +17,7 @@ services:
   kibana:
     image: docker.elastic.co/kibana/kibana:6.6.2
     container_name: kibana
+    hostname: kibana
     restart: always
     environment:
       - "ELASTICSEARCH_URL=http://elasticsearch:9200"
@@ -26,6 +27,24 @@ services:
       - "5601:5601"
     depends_on:
       - elasticsearch
+
+  elasticstorage:
+    container_name: elasticstorage
+    hostname: elasticstorage
+    restart: always
+    build:
+      context: ".."
+      dockerfile: modules/Dockerfile
+    environment:
+      - ELASTIC_HOSTNAME: elasticsearch
+      - KIBANA_HOSTNAME: kibana
+    networks:
+      - docker-elk
+    ports:
+    - 5000:5000
+    depends_on:
+      - kibana
+
 
 
 volumes:
