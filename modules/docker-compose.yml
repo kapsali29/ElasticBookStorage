@@ -36,8 +36,8 @@ services:
       context: ".."
       dockerfile: modules/Dockerfile
     environment:
-      - ELASTIC_HOSTNAME: elasticsearch
-      - KIBANA_HOSTNAME: kibana
+      ELASTIC_HOSTNAME: elasticsearch
+      KIBANA_HOSTNAME: kibana
     networks:
       - docker-elk
     ports:
