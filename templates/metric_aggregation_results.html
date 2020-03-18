@@ -142,17 +142,15 @@ tr, td, th {
   </head>
   <body>
     <div class="main-block">
-      <div class="left-part">
         <i class="fas fa-graduation-cap"></i>
-        <h1>Book Storage</h1>
-          <button id="search_button" type="submit" class=".btn-item">Search Books</button>
-          <button id="create_button" type="submit" class=".btn-item">Add Book</button>
-          <button id="update_delete_button" type="submit" class=".btn-item">Update/Delete Book</button>
-          <button id="metrics_button" type="submit" class=".btn-item">Aggregations</button>
-      </div>
-              <div id="choices" class="form-div">
-
-      </div>
+        <table id="example" class="display" width="100%">
+          <thead>
+            <tr bgcolor="black">
+                <th>metric</th>
+                <th>value</th>
+            </tr>
+        </thead>
+        </table>
     </div>
   </body>
 </html>
@@ -160,18 +158,17 @@ tr, td, th {
 <script type="text/javascript" src="jquery-3.3.1.js" ></script>
 <script type="text/javascript" src="datatables.min.js" ></script>
 <script type="text/javascript">
-    $(document).ready(function(){
-      $("#search_button").click( function() {
-          window.location = 'form.html';
-      });
-        $("#create_button").click( function() {
-          window.location = 'add_book.html';
-      });
-        $("#update_delete_button").click( function() {
-          window.location = 'update_delete.html';
-      });
-        $("#metrics_button").click( function() {
-          window.location = 'aggregations.html';
-      });
+  $(document).ready(function() {
+    var response = JSON.parse(window.localStorage.getItem('metric_response'));
+    window.localStorage.clear();
+    // var dataset = [{authors: 'jane are',num_reviews: 12,publish_date: "203-20-11", publisher: 'wiley', summary: 'summary', title: 'title'}]
+    var d = response.map(x=>[x.metric, x.value]);
+
+
+    $('#example').DataTable({
+        bSort : false,
+        pageLength: 4,
+      data: d,
     })
+  });
 </script>
