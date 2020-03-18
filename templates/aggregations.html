@@ -206,7 +206,11 @@
                         window.localStorage.setItem('metric_response', JSON.stringify(dataToSend));
                         window.location = 'metric_aggregation_results.html';
                     } else if (metric === "stats"){
-
+                        body = response[0]["stats_num_reviews"];
+                        dataToSend = [{"avg": body["avg"], "count_": body["count"], "max": body["max"], "min": body["min"], "sum": body["sum"]}]
+                        window.localStorage.setItem('metric_response', JSON.stringify(dataToSend));
+                        window.localStorage.setItem('metric_response', JSON.stringify(dataToSend));
+                        window.location = 'stats_aggregation_results.html';
                     }
 
                     // window.location = 'metric_aggregation_results.html';
