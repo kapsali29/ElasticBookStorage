@@ -154,6 +154,8 @@ class QueryBuilder(object):
                 results = self.client.reviews_range_aggregation(
                     ranges=payload['ranges']
                 )
+            elif action == 'get_cluster_health':
+                results = self.client.get_cluster_health()
             return results
         except Exception as ex:
             print(ex)
