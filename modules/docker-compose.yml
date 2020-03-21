@@ -40,6 +40,8 @@ services:
       KIBANA_HOSTNAME: kibana
     networks:
       - docker-elk
+    volumes:
+    - ..:/opt/ElasticStorage
     ports:
     - 5000:5000
     depends_on:
