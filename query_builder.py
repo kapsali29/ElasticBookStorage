@@ -150,6 +150,10 @@ class QueryBuilder(object):
                     metric=payload['metric'],
                     field=payload['field']
                 )
+            elif action == 'reviews_range_aggregation':
+                results = self.client.reviews_range_aggregation(
+                    ranges=payload['ranges']
+                )
             return results
         except Exception as ex:
             print(ex)
