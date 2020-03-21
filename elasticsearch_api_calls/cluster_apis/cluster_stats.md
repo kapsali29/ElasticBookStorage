@@ -1,0 +1,3 @@
+```
+GET /_cluster/stats
+```

@@ -29,7 +29,33 @@ class ElasticBookStorage(object):
             >>> elk.create_book_index()
         """
         try:
-            self.es.indices.create(index=self.book_index, ignore=400)
+            body = {
+                "mappings": {
+                    "book_doc": {
+                        "properties": {
+                            "title": {
+                                "type": "text"
+                            },
+                            "authors": {
+                                "type": "text"
+                            },
+                            "summary": {
+                                "type": "text"
+                            },
+                            "publish_date": {
+                                "type": "date"
+                            },
+                            "num_reviews": {
+                                "type": "integer"
+                            },
+                            "publisher": {
+                                "type": "text"
+                            }
+                        }
+                    }
+                }
+            }
+            self.es.indices.create(index=self.book_index, body=body, ignore=400)
         except Exception as ex:
             print(ex, flush=True)
         pass

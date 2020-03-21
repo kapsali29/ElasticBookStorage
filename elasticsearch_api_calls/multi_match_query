@@ -1,1 +1,0 @@
-GET /bookdb_index/book/_search?q=guide
