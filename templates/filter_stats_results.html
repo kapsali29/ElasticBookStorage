@@ -146,6 +146,7 @@ tr, td, th {
         <table id="example" class="display" width="100%">
           <thead>
             <tr bgcolor="black">
+                <th>Number of books</th>
                 <th>Average</th>
                 <th>Count</th>
                 <th>Max</th>
@@ -165,8 +166,7 @@ tr, td, th {
     var response = JSON.parse(window.localStorage.getItem('metric_response'));
     window.localStorage.clear();
     // var dataset = [{authors: 'jane are',num_reviews: 12,publish_date: "203-20-11", publisher: 'wiley', summary: 'summary', title: 'title'}]
-    var d = response.map(x=>[x.avg, x.count_, x.max, x.min,x.sum]);
-
+    var d = response.map(x=>[x.doc_count, x.avg, x.count_, x.max, x.min, x.sum]);
 
     $('#example').DataTable({
         bSort : false,

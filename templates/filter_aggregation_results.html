@@ -146,11 +146,9 @@ tr, td, th {
         <table id="example" class="display" width="100%">
           <thead>
             <tr bgcolor="black">
-                <th>Average</th>
-                <th>Count</th>
-                <th>Max</th>
-                <th>Min</th>
-                <th>Sum</th>
+                <th>number of books</th>
+                <th>metric</th>
+                <th>value</th>
             </tr>
         </thead>
         </table>
@@ -162,10 +160,9 @@ tr, td, th {
 <script type="text/javascript" src="datatables.min.js" ></script>
 <script type="text/javascript">
   $(document).ready(function() {
-    var response = JSON.parse(window.localStorage.getItem('metric_response'));
+    var response = JSON.parse(window.localStorage.getItem('filter_response'));
     window.localStorage.clear();
-    // var dataset = [{authors: 'jane are',num_reviews: 12,publish_date: "203-20-11", publisher: 'wiley', summary: 'summary', title: 'title'}]
-    var d = response.map(x=>[x.avg, x.count_, x.max, x.min,x.sum]);
+    var d = response.map(x=>[x.doc_count, x.metric, x.value]);
 
 
     $('#example').DataTable({

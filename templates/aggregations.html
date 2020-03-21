@@ -131,10 +131,11 @@
           function setForm(value) {
 
               if (value === 'metric_aggregations') {
+                  $('#filter_aggregations').hide();
                   $('#metric_aggregations').show();
-
-                  // document.getElementById('retrieve_book_by_id').style = 'display:block;';
-                  // document.getElementById('fuzzy_queries').style = 'display:none;';
+              } else if (value === 'filter_aggregations'){
+                  $('#metric_aggregations').hide();
+                  $('#filter_aggregations').show();
               }
           }
 
@@ -142,6 +143,7 @@
 
   <script type="text/javascript">
     function showForms(){
+        $('#filter_aggregations').hide();
         $('#metric_aggregations').show();
     }
 </script>
@@ -152,6 +154,7 @@
 
         <select id="select_input" onchange="setForm(this.value)">
             <option value="metric_aggregations" selected>Metric Aggregations*</option>
+            <option value="filter_aggregations">Filter Aggregations</option>
           </select>
           <button id="submit_button" type="submit" class=".btn-item">Submit</button>
       </div>
@@ -166,6 +169,19 @@
         <input id="metric" class="fname" type="text" name="name" placeholder="metric">
     </div>
   </div>
+        <div id="filter_aggregations" class="form-div">
+    <div class="title">
+      <i class="fas fa-pencil-alt"></i>
+      <h2>ElasticSearch Filter Aggregations</h2>
+    </div>
+    <div class="info">
+        <input id="term" class="fname" type="text" name="name" placeholder="term">
+        <input id="query" class="fname" type="text" name="name" placeholder="query">
+        <input id="metric_filter" class="fname" type="text" name="name" placeholder="metric">
+        <input id="filter_field" class="fname" type="text" name="name" placeholder="field">
+
+    </div>
+  </div>
 
 </div>
     </div>
@@ -175,6 +191,7 @@
 <script type="text/javascript">
   var url = "http://127.0.0.1:5000/ask/storage/";
     $(document).ready(function(){
+        showForms();
         $("#submit_button").click( function() {
             selected_div = $('#select_input').val();
 
@@ -190,19 +207,19 @@
                 data: JSON.stringify({"action":selected_div,"field":$('#field').val(), "metric": metric}),
                 success: function(response){
                     if (metric === "max"){
-                        dataToSend = [{"metric": $('#metric').val(), "value": response[0]["max_num_reviews"]["value"]}]
+                        dataToSend = [{"metric": metric, "value": response[0]["max_num_reviews"]["value"]}];
                         window.localStorage.setItem('metric_response', JSON.stringify(dataToSend));
                         window.location = 'metric_aggregation_results.html';
                     } else if (metric === "min"){
-                        dataToSend = [{"metric": $('#metric').val(), "value": response[0]["min_num_reviews"]["value"]}]
+                        dataToSend = [{"metric": metric, "value": response[0]["min_num_reviews"]["value"]}];
                         window.localStorage.setItem('metric_response', JSON.stringify(dataToSend));
                         window.location = 'metric_aggregation_results.html';
                     } else if (metric === "sum"){
-                        dataToSend = [{"metric": $('#metric').val(), "value": response[0]["sum_num_reviews"]["value"]}]
+                        dataToSend = [{"metric": metric, "value": response[0]["sum_num_reviews"]["value"]}];
                         window.localStorage.setItem('metric_response', JSON.stringify(dataToSend));
                         window.location = 'metric_aggregation_results.html';
                     } else if (metric === "avg"){
-                        dataToSend = [{"metric": $('#metric').val(), "value": response[0]["avg_num_reviews"]["value"]}]
+                        dataToSend = [{"metric": metric, "value": response[0]["avg_num_reviews"]["value"]}];
                         window.localStorage.setItem('metric_response', JSON.stringify(dataToSend));
                         window.location = 'metric_aggregation_results.html';
                     } else if (metric === "stats"){
@@ -216,9 +233,51 @@
                     // window.location = 'metric_aggregation_results.html';
                 },
             })
-
-
-
+            } else if (selected_div === 'filter_aggregations'){
+                metric = $('#metric_filter').val();
+                $.ajax({
+                    url: "http://127.0.0.1:5000/ask/storage/",
+                    type: "POST",
+                    dataType: 'json',
+                    timeout: 0,
+                    contentType: 'application/json',
+                    data: JSON.stringify({"action": selected_div, "term": $('#term').val(), "query": $('#query').val(), "metric": metric, "field": $('#filter_field').val()}),
+                    success: function (response) {
+                        if (metric === 'max') {
+                            aggregated_data = response[0]["aggregated_data"];
+                            dataToSend = [{"doc_count": aggregated_data["doc_count"],"metric": metric, "value": aggregated_data["max_num_reviews"]["value"]}];
+                            window.localStorage.setItem('filter_response', JSON.stringify(dataToSend));
+                            window.location = 'filter_aggregation_results.html';
+                        } else if (metric === 'min'){
+                            aggregated_data = response[0]["aggregated_data"];
+                            dataToSend = [{"doc_count": aggregated_data["doc_count"],"metric": metric, "value": aggregated_data["min_num_reviews"]["value"]}];
+                            window.localStorage.setItem('filter_response', JSON.stringify(dataToSend));
+                            window.location = 'filter_aggregation_results.html';
+                        } else if (metric === 'avg'){
+                            aggregated_data = response[0]["aggregated_data"];
+                            dataToSend = [{"doc_count": aggregated_data["doc_count"],"metric": metric, "value": aggregated_data["avg_num_reviews"]["value"]}];
+                            window.localStorage.setItem('filter_response', JSON.stringify(dataToSend));
+                            window.location = 'filter_aggregation_results.html';
+                        } else if (metric === 'sum'){
+                            aggregated_data = response[0]["aggregated_data"];
+                            dataToSend = [{"doc_count": aggregated_data["doc_count"],"metric": metric, "value": aggregated_data["sum_num_reviews"]["value"]}];
+                            window.localStorage.setItem('filter_response', JSON.stringify(dataToSend));
+                            window.location = 'filter_aggregation_results.html';
+                        } else if (metric === 'stats'){
+                            aggregated_data = response[0]["aggregated_data"];
+                            dataToSend = [{
+                                "doc_count": aggregated_data["doc_count"],
+                                "avg": aggregated_data["stats_num_reviews"]["avg"],
+                                "count_": aggregated_data["stats_num_reviews"]["count"],
+                                "max": aggregated_data["stats_num_reviews"]["max"],
+                                "min": aggregated_data["stats_num_reviews"]["min"],
+                                "sum": aggregated_data["stats_num_reviews"]["sum"]
+                            }];
+                            window.localStorage.setItem('filter_response', JSON.stringify(dataToSend));
+                            window.location = 'filter_stats_results.html';
+                        }
+                    },
+                })
             }
         });
     })
