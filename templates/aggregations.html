@@ -132,10 +132,16 @@
 
               if (value === 'metric_aggregations') {
                   $('#filter_aggregations').hide();
+                  $('#range_aggregations').hide();
                   $('#metric_aggregations').show();
               } else if (value === 'filter_aggregations'){
                   $('#metric_aggregations').hide();
+                  $('#range_aggregations').hide();
                   $('#filter_aggregations').show();
+              } else if (value === 'range_aggregations'){
+                  $('#metric_aggregations').hide();
+                  $('#filter_aggregations').hide();
+                  $('#range_aggregations').show();
               }
           }
 
@@ -144,6 +150,7 @@
   <script type="text/javascript">
     function showForms(){
         $('#filter_aggregations').hide();
+        $('#range_aggregations').hide();
         $('#metric_aggregations').show();
     }
 </script>
@@ -155,6 +162,7 @@
         <select id="select_input" onchange="setForm(this.value)">
             <option value="metric_aggregations" selected>Metric Aggregations*</option>
             <option value="filter_aggregations">Filter Aggregations</option>
+            <option value="range_aggregations">Range Aggregations</option>
           </select>
           <button id="submit_button" type="submit" class=".btn-item">Submit</button>
       </div>
@@ -180,6 +188,16 @@
         <input id="metric_filter" class="fname" type="text" name="name" placeholder="metric">
         <input id="filter_field" class="fname" type="text" name="name" placeholder="field">
 
+    </div>
+  </div>
+        <div id="range_aggregations" class="form-div">
+    <div class="title">
+      <i class="fas fa-pencil-alt"></i>
+      <h2>ElasticSearch Range Aggregations</h2>
+    </div>
+    <div class="info">
+        <input id="from" class="fname" type="text" name="name" placeholder="from">
+        <input id="to" class="fname" type="text" name="name" placeholder="to">
     </div>
   </div>
 
@@ -278,6 +296,34 @@
                         }
                     },
                 })
+            } else if (selected_div === 'range_aggregations'){
+                payload = {};
+
+                to = $('#to').val();
+                from = $('#from').val();
+
+                if (from){
+                    payload["from"] = from;
+                }
+                if (to){
+                    payload["to"] = to;
+                }
+
+
+                $.ajax({
+                url: "http://127.0.0.1:5000/ask/storage/",
+                type: "POST",
+                dataType: 'json',
+                timeout: 0,
+                contentType: 'application/json',
+                data: JSON.stringify({"action":"reviews_range_aggregation", "ranges": [payload]}),
+                success: function(response){
+                    buckets = response[0]["review_ranges"]["buckets"][0];
+                    dataToSend = [{"doc_count": buckets["doc_count"],"range": buckets["key"]}];
+                    window.localStorage.setItem('range_response', JSON.stringify(dataToSend));
+                    window.location = 'range_results.html';
+                  },
+            });
             }
         });
     })
