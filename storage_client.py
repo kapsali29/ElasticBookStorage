@@ -587,3 +587,19 @@ class ElasticBookStorage(object):
             return results
         except Exception as ex:
             print(ex)
+
+    def get_cluster_health(self):
+        """This function is used to retrieve cluster health info"""
+        try:
+            cluster_health = self.es.cluster.health()
+            return cluster_health
+        except Exception as ex:
+            print(ex)
+
+    def get_cluster_stats(self):
+        """This function is used to retrieve cluster stats info"""
+        try:
+            cluster_stats = self.es.cluster.stats()
+            return cluster_stats
+        except Exception as ex:
+            print(ex)
