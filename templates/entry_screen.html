@@ -145,6 +145,7 @@ tr, td, th {
       <div class="left-part">
         <i class="fas fa-graduation-cap"></i>
         <h1>Book Storage</h1>
+          <button id="all_books" type="submit" class=".btn-item">Get All Books</button>
           <button id="search_button" type="submit" class=".btn-item">Search Books</button>
           <button id="create_button" type="submit" class=".btn-item">Add Book</button>
           <button id="update_delete_button" type="submit" class=".btn-item">Update/Delete Book</button>
@@ -161,6 +162,22 @@ tr, td, th {
 <script type="text/javascript" src="datatables.min.js" ></script>
 <script type="text/javascript">
     $(document).ready(function(){
+        $("#all_books").click( function() {
+            $.ajax({
+                url: "http://127.0.0.1:5000/ask/storage/",
+                type: "POST",
+                dataType: 'json',
+                timeout: 0,
+                contentType: 'application/json',
+                data: JSON.stringify({"action":"fetch_all"}),
+                success: function(response){
+                    window.localStorage.setItem('response', JSON.stringify(response));
+                    window.location = 'result.html';
+                  },
+            });
+          window.location = 'form.html';
+      });
+
       $("#search_button").click( function() {
           window.location = 'form.html';
       });
