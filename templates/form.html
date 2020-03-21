@@ -139,6 +139,7 @@
                   $('#term_query').hide();
                   $('#range_query').hide();
                   $('#bool_query').hide();
+                  $('#multi_get').hide();
                   $('#retrieve_book_by_id').show();
 
                   // document.getElementById('retrieve_book_by_id').style = 'display:block;';
@@ -152,6 +153,7 @@
                   $('#term_query').hide();
                   $('#range_query').hide();
                   $('#bool_query').hide();
+                  $('#multi_get').hide();
                   $('#fuzzy_queries').show();
                   // document.getElementById('fuzzy_queries').style = 'display:block;';
                   // document.getElementById('retrieve_book_by_id').style = 'display:none;';
@@ -164,6 +166,7 @@
                   $('#term_query').hide();
                   $('#range_query').hide();
                   $('#bool_query').hide();
+                  $('#multi_get').hide();
                   $('#search_book_by_parameter').show();
 
               } else if (value === 'match_phrase_prefix'){
@@ -176,6 +179,7 @@
                   $('#term_query').hide();
                   $('#range_query').hide();
                   $('#bool_query').hide();
+                  $('#multi_get').hide();
                   $('#match_phrase_prefix').show();
 
               } else if (value === 'regex'){
@@ -187,6 +191,7 @@
                   $('#term_query').hide();
                   $('#range_query').hide();
                   $('#bool_query').hide();
+                  $('#multi_get').hide();
                   $('#regex').show();
               } else if (value === 'match_phrase_query'){
 
@@ -197,6 +202,7 @@
                   $('#regex').hide();
                   $('#range_query').hide();
                   $('#bool_query').hide();
+                  $('#multi_get').hide();
                   $('#match_phrase_query').show();
               } else if (value === 'term_query'){
                   $('#retrieve_book_by_id').hide();
@@ -207,6 +213,7 @@
                   $('#match_phrase_query').hide();
                   $('#range_query').hide();
                   $('#bool_query').hide();
+                  $('#multi_get').hide();
                   $('#term_query').show();
               } else if (value === 'range_query'){
                   $('#retrieve_book_by_id').hide();
@@ -217,6 +224,7 @@
                   $('#match_phrase_query').hide();
                   $('#term_query').hide();
                   $('#bool_query').hide();
+                  $('#multi_get').hide();
                   $('#range_query').show();
               } else if (value === 'bool_query') {
                   $('#retrieve_book_by_id').hide();
@@ -227,7 +235,19 @@
                   $('#match_phrase_query').hide();
                   $('#term_query').hide();
                   $('#range_query').hide();
+                  $('#multi_get').hide();
                   $('#bool_query').show();
+              } else if (value === 'multi_get'){
+                  $('#retrieve_book_by_id').hide();
+                  $('#fuzzy_queries').hide();
+                  $('#search_book_by_parameter').hide();
+                  $('#match_phrase_prefix').hide();
+                  $('#regex').hide();
+                  $('#match_phrase_query').hide();
+                  $('#term_query').hide();
+                  $('#range_query').hide();
+                  $('#bool_query').hide();
+                  $('#multi_get').show();
               }
           }
 
@@ -239,6 +259,7 @@
 
         <select id="select_input" onchange="setForm(this.value)">
             <option value="retrieve_book_by_id" selected>Retrieve Book By ID*</option>
+            <option value="multi_get">Retrieve Multiple Books Using IDs</option>
             <option value="search_book_by_parameter">Search Books By Parameter</option>
             <option value="fuzzy_queries">Fuzzy Queries</option>
             <option value="regex">WildCard Query</option>
@@ -259,6 +280,16 @@
         </div>
         <div class="info">
           <input id="book_id" class="fname" type="text" name="name" placeholder="Book ID">
+        </div>
+      </div>
+              <div id="multi_get" class="form-div">
+<!--      <form action="result.html">-->
+        <div class="title">
+          <i class="fas fa-pencil-alt"></i>
+          <h2>Multi Get Books By IDs</h2>
+        </div>
+        <div class="info">
+          <input id="multi_ids" class="fname" type="text" name="name" placeholder="Book IDs">
         </div>
       </div>
 
@@ -359,6 +390,7 @@
         $('#match_phrase_query').hide();
         $('#bool_query').hide();
         $('#range_query').hide();
+        $('#multi_get').hide();
         $('#retrieve_book_by_id').show();
     }
 </script>
@@ -371,7 +403,7 @@
 
             selected_div = $('#select_input').val();
 
-          if (selected_div == 'retrieve_book_by_id'){
+          if (selected_div === 'retrieve_book_by_id'){
             $.ajax({
                 url: "http://127.0.0.1:5000/ask/storage/",
                 type: "POST",
@@ -384,7 +416,7 @@
                     window.location = 'result.html';
                   },
             })
-          } else if (selected_div == 'fuzzy_queries'){
+          } else if (selected_div === 'fuzzy_queries'){
                           $.ajax({
                               url: "http://127.0.0.1:5000/ask/storage/",
                               type: "POST",
@@ -398,7 +430,7 @@
                                   console.log(response);
                   },
             })
-          } else if (selected_div == 'search_book_by_parameter'){
+          } else if (selected_div === 'search_book_by_parameter'){
               $.ajax({
                   url: "http://127.0.0.1:5000/ask/storage/",
                   type: "POST",
@@ -413,7 +445,7 @@
                   },
             })
           }
-          else if (selected_div == 'match_phrase_prefix'){
+          else if (selected_div === 'match_phrase_prefix'){
               $.ajax({
                   url: "http://127.0.0.1:5000/ask/storage/",
                   type: "POST",
@@ -427,7 +459,7 @@
                       console.log(response);
                   },
             })
-          } else if (selected_div == 'regex'){
+          } else if (selected_div === 'regex'){
               $.ajax({
                   url: "http://127.0.0.1:5000/ask/storage/",
                   type: "POST",
@@ -441,7 +473,7 @@
                       console.log(response);
                   },
             })
-          } else if (selected_div == 'match_phrase_query'){
+          } else if (selected_div === 'match_phrase_query'){
               $.ajax({
                   url: "http://127.0.0.1:5000/ask/storage/",
                   type: "POST",
@@ -454,7 +486,7 @@
                       window.location = 'result.html';
                   },
             })
-          } else if (selected_div == 'term_query'){
+          } else if (selected_div === 'term_query'){
               selected_terms = $('#terms').val().split(",");
 
               if (selected_terms.length == 1){
@@ -475,7 +507,7 @@
                       console.log(response);
                   },
             })
-          } else if (selected_div == 'range_query'){
+          } else if (selected_div === 'range_query'){
               console.log(selected_div);
 
               $('input[name="daterange"]').daterangepicker({
@@ -498,7 +530,7 @@
                   },
             })
               });
-          } else if (selected_div == 'bool_query'){
+          } else if (selected_div === 'bool_query'){
               mustVval = $('#must').val();
               shouldVal = $('#should').val();
               mustNotVal = $('#must_not').val();
@@ -528,6 +560,23 @@
                   data: JSON.stringify(data),
                   success: function(response){
                       window.localStorage.setItem('response', JSON.stringify(response));
+                      window.location = 'result.html';
+                      console.log(response);
+                  },
+            })
+          } else if (selected_div === 'multi_get'){
+              book_ids = $('#multi_ids').val().split(',')
+
+              $.ajax({
+                  url: "http://127.0.0.1:5000/ask/storage/",
+                  type: "POST",
+                  dataType: 'json',
+                  timeout: 0,
+                  contentType: 'application/json',
+                  data: JSON.stringify({'action': selected_div, 'ids':book_ids}),
+                  success: function(response){
+                      bookData = response[0]['docs'];
+                      window.localStorage.setItem('response', JSON.stringify(bookData));
                       window.location = 'result.html';
                       console.log(response);
                   },

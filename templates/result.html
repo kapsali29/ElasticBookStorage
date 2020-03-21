@@ -166,7 +166,7 @@ tr, td, th {
     var response = JSON.parse(window.localStorage.getItem('response'));
     window.localStorage.clear();
     // var dataset = [{authors: 'jane are',num_reviews: 12,publish_date: "203-20-11", publisher: 'wiley', summary: 'summary', title: 'title'}]
-    var d = response.map(x=>[x.authors, x.num_reviews, x.publish_date, x.publisher, x.summary, x.title])
+    var d = response.map(x=>[x.authors, x.num_reviews, x.publish_date, x.publisher, x.summary, x.title]);
 
 
     $('#example').DataTable({
