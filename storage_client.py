@@ -414,7 +414,9 @@ class ElasticBookStorage(object):
             >>> delete_by_query(query="python", fields=['title'])
         """
         try:
-            client = Elasticsearch()
+            client = Elasticsearch(
+                hosts=ELASTIC_HOSTNAME
+            )
             s = Search(using=client, index=self.book_index)
 
             retrieved_items = s.query(
@@ -438,7 +440,9 @@ class ElasticBookStorage(object):
             >>> update_by_query(fields="publisher", query="oreilly", field_to_update="publisher", new_value="OnMedia")
         """
         try:
-            client = Elasticsearch()
+            client = Elasticsearch(
+                hosts=ELASTIC_HOSTNAME
+            )
             ubq = UpdateByQuery(
                 using=client,
                 index=self.book_index
@@ -476,7 +480,9 @@ class ElasticBookStorage(object):
 
         """
         try:
-            client = Elasticsearch()
+            client = Elasticsearch(
+                hosts=ELASTIC_HOSTNAME
+            )
 
             s = Search(using=client, index=self.book_index)
 
