@@ -602,16 +602,16 @@ class ElasticBookStorage(object):
         try:
             book_ids = kwargs['ids']
 
-            results = self.es.mget(
+            book_results = self.es.mget(
                 index=self.book_index,
                 doc_type=self.book_doc,
-                body={'ids': book_ids}
+                body={'ids': book_ids},
             )
+            book_docs = book_results['docs']
+            results = {'docs': [book['_source'] for book in book_docs]}
             return results
         except Exception as ex:
             print(ex)
-
-
 
     def get_cluster_health(self):
         """This function is used to retrieve cluster health info"""
