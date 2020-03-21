@@ -588,6 +588,31 @@ class ElasticBookStorage(object):
         except Exception as ex:
             print(ex)
 
+    def multi_get_books(self, **kwargs):
+        """
+        The following function is used to fetch books based on ElasticSearch mget API
+
+        :param kwargs: provided kwargs
+        :return: elastic search response
+
+        Examples:
+            >>> elk = ElasticBookStorage()
+            >>> results = elk.multi_get_books(ids=[19,11])
+        """
+        try:
+            book_ids = kwargs['ids']
+
+            results = self.es.mget(
+                index=self.book_index,
+                doc_type=self.book_doc,
+                body={'ids': book_ids}
+            )
+            return results
+        except Exception as ex:
+            print(ex)
+
+
+
     def get_cluster_health(self):
         """This function is used to retrieve cluster health info"""
         try:

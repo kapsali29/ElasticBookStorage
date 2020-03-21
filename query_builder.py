@@ -158,6 +158,10 @@ class QueryBuilder(object):
                 results = self.client.get_cluster_health()
             elif action == 'get_cluster_stats':
                 results = self.client.get_cluster_stats()
+            elif action == 'multi_get':
+                results = self.client.multi_get_books(
+                    ids=payload['ids']
+                )
             return results
         except Exception as ex:
             print(ex)
