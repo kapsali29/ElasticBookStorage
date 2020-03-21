@@ -156,6 +156,8 @@ class QueryBuilder(object):
                 )
             elif action == 'get_cluster_health':
                 results = self.client.get_cluster_health()
+            elif action == 'get_cluster_stats':
+                results = self.client.get_cluster_stats()
             return results
         except Exception as ex:
             print(ex)
