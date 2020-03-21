@@ -162,6 +162,8 @@ class QueryBuilder(object):
                 results = self.client.multi_get_books(
                     ids=payload['ids']
                 )
+            elif action == "fetch_all":
+                results = self.client.fetch_all_docs()
             return results
         except Exception as ex:
             print(ex)

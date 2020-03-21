@@ -31,7 +31,7 @@ class ElasticBookStorage(object):
         try:
             self.es.indices.create(index=self.book_index, ignore=400)
         except Exception as ex:
-            print(ex)
+            print(ex, flush=True)
         pass
 
     def bulk_insert(self, data):
@@ -57,7 +57,7 @@ class ElasticBookStorage(object):
             ]
             helpers.bulk(self.es, actions=actions)
         except Exception as e:
-            print(e)
+            print(e, flush=True)
 
     def create_book_doc(self, title, authors, summary, publisher, num_reviews, publish_date):
         """
@@ -91,7 +91,7 @@ class ElasticBookStorage(object):
             }
             self.es.index(index=self.book_index, doc_type=self.book_doc, body=body)
         except Exception as e:
-            print(e)
+            print(e, flush=True)
 
     def retrieve_book_by_id(self, book_id):
         """
@@ -107,7 +107,7 @@ class ElasticBookStorage(object):
             results = self.es.get_source(index=self.book_index, doc_type=self.book_doc, id=str(book_id))
             return results
         except Exception as ex:
-            print(ex)
+            print(ex, flush=True)
 
     def remove_book_doc(self, book_id):
         """
@@ -123,7 +123,7 @@ class ElasticBookStorage(object):
         try:
             self.es.delete(index=self.book_index, doc_type=self.book_doc, id=str(book_id))
         except Exception as e:
-            print(e)
+            print(e, flush=True)
 
     def multi_match_query(self, query):
         """
@@ -141,7 +141,7 @@ class ElasticBookStorage(object):
             results = self.es.search(index=self.book_index, q=query, size=HITS_SIZE)["hits"]["hits"]
             return results
         except Exception as e:
-            print(e)
+            print(e, flush=True)
 
     def search_book_by_param(self, *args, _source=[]):
         """
@@ -173,7 +173,7 @@ class ElasticBookStorage(object):
             results = self.es.search(index=self.book_index, body=body, size=HITS_SIZE)["hits"]["hits"]
             return results
         except Exception as ee:
-            print(ee)
+            print(ee, flush=True)
 
     def fuzzy_queries(self, query, _source=[], **kwargs):
         """
@@ -210,7 +210,7 @@ class ElasticBookStorage(object):
             results = self.es.search(index=self.book_index, body=body, size=HITS_SIZE)["hits"]["hits"]
             return results
         except Exception as ee:
-            print(ee)
+            print(ee, flush=True)
 
     def wild_card_query(self, _source=[], **kwargs):
         """
@@ -243,7 +243,7 @@ class ElasticBookStorage(object):
             results = self.es.search(index=self.book_index, body=body, size=HITS_SIZE)["hits"]["hits"]
             return results
         except Exception as ex:
-            print(ex)
+            print(ex, flush=True)
 
     def regex_query(self, **kwargs):
         """
@@ -275,7 +275,7 @@ class ElasticBookStorage(object):
             results = self.es.search(index=self.book_index, body=body, size=HITS_SIZE)["hits"]["hits"]
             return results
         except Exception as ex:
-            print(ex)
+            print(ex, flush=True)
 
     def match_phrase_query(self, query, **kwargs):
         """
@@ -309,7 +309,7 @@ class ElasticBookStorage(object):
             results = self.es.search(index=self.book_index, body=body, size=HITS_SIZE)["hits"]["hits"]
             return results
         except Exception as ex:
-            print(ex)
+            print(ex, flush=True)
 
     def match_phrase_prefix(self, query, slop, max_expansions=10, _source=[]):
         """
@@ -342,7 +342,7 @@ class ElasticBookStorage(object):
             results = self.es.search(index=self.book_index, body=body, size=HITS_SIZE)["hits"]["hits"]
             return results
         except Exception as ex:
-            print(ex)
+            print(ex, flush=True)
 
     def term_query(self, _source=[], **kwargs):
         """
@@ -374,7 +374,7 @@ class ElasticBookStorage(object):
             results = self.es.search(index=self.book_index, body=body, size=HITS_SIZE)["hits"]["hits"]
             return results
         except Exception as ex:
-            print(ex)
+            print(ex, flush=True)
 
     def delete_by_query(self, query, fields):
         """
@@ -399,7 +399,7 @@ class ElasticBookStorage(object):
             results = {'count': retrieved_items.count()}
             return results
         except Exception as ex:
-            print(ex)
+            print(ex, flush=True)
 
     def update_by_query(self, **kwargs):
         """
@@ -433,7 +433,7 @@ class ElasticBookStorage(object):
             results = update_query.execute()._d_
             return results
         except Exception as ex:
-            print(ex)
+            print(ex, flush=True)
 
     def query_combination(self, **kwargs):
         """
@@ -470,7 +470,7 @@ class ElasticBookStorage(object):
             return response.__dict__['_l_']
 
         except Exception as ex:
-            print(ex)
+            print(ex, flush=True)
 
     def range_query(self, **kwargs):
         """
@@ -496,7 +496,7 @@ class ElasticBookStorage(object):
             results = self.es.search(index=self.book_index, body=body, size=HITS_SIZE)["hits"]["hits"]
             return results
         except Exception as ex:
-            print(ex)
+            print(ex, flush=True)
 
     def metric_aggregations(self, **kwargs):
         """
@@ -526,7 +526,7 @@ class ElasticBookStorage(object):
             results = self.es.search(index=self.book_index, body=body, size=0)["aggregations"]
             return results
         except Exception as ex:
-            print(ex)
+            print(ex, flush=True)
 
     def filter_aggregations(self, **kwargs):
         """
@@ -557,7 +557,7 @@ class ElasticBookStorage(object):
             results = self.es.search(index=self.book_index, body=body, size=0)["aggregations"]
             return results
         except Exception as ex:
-            print(ex)
+            print(ex, flush=True)
 
     def reviews_range_aggregation(self, **kwargs):
         """
@@ -586,7 +586,7 @@ class ElasticBookStorage(object):
             results = self.es.search(index=self.book_index, body=body, size=0)["aggregations"]
             return results
         except Exception as ex:
-            print(ex)
+            print(ex, flush=True)
 
     def multi_get_books(self, **kwargs):
         """
@@ -611,7 +611,7 @@ class ElasticBookStorage(object):
             results = {'docs': [book['_source'] for book in book_docs]}
             return results
         except Exception as ex:
-            print(ex)
+            print(ex, flush=True)
 
     def get_cluster_health(self):
         """This function is used to retrieve cluster health info"""
@@ -619,7 +619,7 @@ class ElasticBookStorage(object):
             cluster_health = self.es.cluster.health()
             return cluster_health
         except Exception as ex:
-            print(ex)
+            print(ex, flush=True)
 
     def get_cluster_stats(self):
         """This function is used to retrieve cluster stats info"""
@@ -627,4 +627,20 @@ class ElasticBookStorage(object):
             cluster_stats = self.es.cluster.stats()
             return cluster_stats
         except Exception as ex:
-            print(ex)
+            print(ex, flush=True)
+
+    def fetch_all_docs(self):
+        """This function is used to returned all stored books"""
+        try:
+            body = {
+                "query": {
+                    "match_all": {}
+                }
+            }
+            results = self.es.search(
+                index=self.book_index,
+                body=body,
+                size=HITS_SIZE)["hits"]["hits"]
+            return results
+        except Exception as ex:
+            print(ex, flush=True)
