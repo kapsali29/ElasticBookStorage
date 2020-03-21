@@ -558,3 +558,32 @@ class ElasticBookStorage(object):
             return results
         except Exception as ex:
             print(ex)
+
+    def reviews_range_aggregation(self, **kwargs):
+        """
+        This function is used to fetch reviews aggregations from elastic search
+
+        :param kwargs: provided kwargs
+        :return: elastic search response
+
+        Examples:
+            >>> elk = ElasticBookStorage()
+            >>> res = elk.reviews_range_aggregation(ranges=[{ "to" : 100 },{ "from" : 200 },{ "from" : 100, "to" : 200 }])
+        """
+        try:
+            ranges = kwargs['ranges']
+
+            body = {
+                "aggs": {
+                    "review_ranges": {
+                        "range": {
+                            "field": "num_reviews",
+                            "ranges": ranges
+                        }
+                    }
+                }
+            }
+            results = self.es.search(index=self.book_index, body=body, size=0)["aggregations"]
+            return results
+        except Exception as ex:
+            print(ex)
