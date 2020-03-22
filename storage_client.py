@@ -100,7 +100,7 @@ class ElasticBookStorage(object):
             >>> title="Some book"
             >>> authors=["Author1", "Author2"]
             >>> summary = "this is a book written by Author1 and Author2"
-            >>> publisher = "Loki AE"
+            >>> publisher = "Publisher SA"
             >>> num_reviews = 20
             >>> publish_date = "2014-04-05"
             >>> elk = ElasticBookStorage()

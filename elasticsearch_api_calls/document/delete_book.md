@@ -1,0 +1,1 @@
+DELETE book_index/book_doc/1
