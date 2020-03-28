@@ -247,7 +247,7 @@ class ElasticBookStorage(object):
         :return:
 
         Example:
-            >>> wild_card_query("authors", query="t*")
+            >>> wild_card_query(field="authors", query="t*")
         """
         try:
             field = kwargs['field']
