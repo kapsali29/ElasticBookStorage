@@ -466,7 +466,7 @@
                   dataType: 'json',
                   timeout: 0,
                   contentType: 'application/json',
-                  data: JSON.stringify({"action":'wild_card_query',"field":$('#wildcard_field').val(), "query":$('#mphrase_query').val()}),
+                  data: JSON.stringify({"action":'wild_card_query',"field":$('#wildcard_field').val(), "query":$('#wildcard_q').val()}),
                   success: function(response){
                       window.localStorage.setItem('response', JSON.stringify(response));
                       window.location = 'result.html';
